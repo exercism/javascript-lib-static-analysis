@@ -1,0 +1,9 @@
+/node_modules
+/src
+/test
+/.babelrc
+/.eslintignore
+/.eslintrc
+/.prettierrc
+/jest.config.js
+/tsconfig.json
