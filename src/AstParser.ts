@@ -71,9 +71,36 @@ export class ParsedSource {
   ) {}
 }
 
+const DEFAULT_PARSE_OPTIONS: ParseOptions = {
+  comment: false,
+  loc: false,
+}
+
 export class AstParser {
+  /**
+   * Holds a parser that is recommended for representing. This means that it
+   * does not hold locational information (where differences are caused by
+   * whitespace differences) or commentary.
+   */
+  public static REPRESENTER: AstParser = new AstParser({
+    comment: false,
+    loc: false,
+    range: false,
+  })
+
+  /**
+   * Holds a parser that is recommended for analysis. This means that it dóés
+   * hold locational information (in order to be able to extract tokens), but
+   * does not hold any commentary.
+   */
+  public static ANALYZER: AstParser = new AstParser({
+    comment: false,
+    loc: true,
+    range: true,
+  })
+
   constructor(
-    private readonly options?: ParseOptions,
+    private readonly options: ParseOptions = DEFAULT_PARSE_OPTIONS,
     private readonly n = 1
   ) {}
 

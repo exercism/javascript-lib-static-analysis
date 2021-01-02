@@ -1,17 +1,41 @@
-export let fileExtensions = /\.(jsx?|tsx?|mjs)$/
-export let testFilePattern = /\.spec|test\./
-export let configurationFilePattern = /(?:babel\.config\.js|jest\.config\.js|\.eslintrc\.js)$/
-
-export function setFileExtensions(pattern: RegExp) {
-  fileExtensions = pattern
+export type TrackOptions = {
+  fileExtensions: RegExp
+  testFilePattern: RegExp
+  configurationFilePattern: RegExp
 }
 
-export function setTestFiles(pattern: RegExp) {
-  testFilePattern = pattern
+export const GLOBAL_TRACK_OPTIONS: TrackOptions = {
+  fileExtensions: /\.(jsx?|tsx?|mjs)$/,
+  testFilePattern: /\.spec|test\./,
+  configurationFilePattern: /(?:babel\.config\.js|jest\.config\.js|\.eslintrc\.js)$/,
 }
 
-export function setConfigurationFiles(pattern: RegExp) {
-  configurationFilePattern = pattern
+export function getTrackOptions(): TrackOptions {
+  return { ...GLOBAL_TRACK_OPTIONS }
+}
+
+/**
+ * Sets the DEFAULT file extensions globally
+ * @param pattern
+ */
+export function setFileExtensions(pattern: RegExp): void {
+  GLOBAL_TRACK_OPTIONS.fileExtensions = pattern
+}
+
+/**
+ * Sets the DEFAULT test files pattern globally
+ * @param pattern
+ */
+export function setTestFiles(pattern: RegExp): void {
+  GLOBAL_TRACK_OPTIONS.testFilePattern = pattern
+}
+
+/**
+ * Sets the DEFAULT configuration files patern globally
+ * @param pattern
+ */
+export function setConfigurationFiles(pattern: RegExp): void {
+  GLOBAL_TRACK_OPTIONS.configurationFilePattern = pattern
 }
 
 export interface Input {

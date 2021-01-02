@@ -1,6 +1,6 @@
 {
   "name": "@exercism/static-analysis",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Exercism static analysis library for javascript and typescript",
   "repository": "https://github.com/SleeplessByte/exercism-static-analysis",
   "author": "Derk-Jan Karrenbeld <derk-jan+github@karrenbeld.info>",
@@ -10,7 +10,7 @@
     "build": "yarn build:code && yarn build:types",
     "build:code": "yarn babel src --out-dir dist --extensions .ts",
     "build:types": "tsc --declaration --emitDeclarationOnly --outDir dist",
-    "prepublish": "yarn test",
+    "prepublish": "yarn test && yarn build",
     "lint": "yarn eslint . --ext ts,js,tsx,jsx,mjs",
     "test": "jest"
   },

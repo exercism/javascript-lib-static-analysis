@@ -2,17 +2,14 @@ import { FileInput } from './FileInput'
 
 import nodePath from 'path'
 import { readDir } from '../utils/fs'
-import {
-  configurationFilePattern,
-  fileExtensions,
-  testFilePattern,
-  Input,
-} from './Input'
+import { Input, TrackOptions, getTrackOptions } from './Input'
 
 export class DirectoryInput implements Input {
   constructor(
     private readonly path: string,
-    private readonly exerciseSlug: string
+    private readonly exerciseSlug: string,
+
+    private trackOptions = getTrackOptions()
   ) {}
 
   public async read(n = 1, preferredExtension = 'js'): Promise<string[]> {
@@ -21,19 +18,33 @@ export class DirectoryInput implements Input {
     const candidates = findCandidates(
       files,
       n,
-      `${this.exerciseSlug}.${preferredExtension}`
+      `${this.exerciseSlug}.${preferredExtension}`,
+      this.trackOptions
     )
-    const fileSources = await Promise.all(
+
+    return await Promise.all(
       candidates.map(
-        (candidate): Promise<string> => {
-          return new FileInput(nodePath.join(this.path, candidate))
-            .read()
-            .then(([source]): string => source)
+        async (candidate): Promise<string> => {
+          const [source] = await new FileInput(
+            nodePath.join(this.path, candidate),
+            this.trackOptions
+          ).read()
+          return source
         }
       )
     )
+  }
 
-    return fileSources
+  public set fileExtensions(next: RegExp) {
+    this.trackOptions = { ...this.trackOptions, fileExtensions: next }
+  }
+
+  public set testFilePattern(next: RegExp) {
+    this.trackOptions = { ...this.trackOptions, testFilePattern: next }
+  }
+
+  public set configurationFilePattern(next: RegExp) {
+    this.trackOptions = { ...this.trackOptions, configurationFilePattern: next }
   }
 }
 
@@ -48,16 +59,17 @@ export class DirectoryInput implements Input {
 function findCandidates(
   files: string[],
   n: number,
-  ...preferredNames: string[]
+  preferredName: string,
+  { fileExtensions, testFilePattern, configurationFilePattern }: TrackOptions
 ): string[] {
   const candidates = files
     .filter((file): boolean => fileExtensions.test(file))
     .filter((file): boolean => !testFilePattern.test(file))
     .filter((file): boolean => !configurationFilePattern.test(file))
 
-  const preferredMatches = preferredNames
-    ? candidates.filter((file): boolean => preferredNames.includes(file))
-    : []
+  const preferredMatches = candidates.filter((file): boolean =>
+    preferredName.includes(file)
+  )
 
   const allMatches =
     preferredMatches.length >= n

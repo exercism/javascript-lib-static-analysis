@@ -19,7 +19,7 @@ describe('FileInput', () => {
       mockFiles(SOLUTION_FILES)
     })
 
-    test('can find a source file', async () => {
+    it('can find a source file', async () => {
       const input = new FileInput('/path/to/solution/two-fer.js')
       const [file, ...other] = await input.read()
 
@@ -37,7 +37,7 @@ describe('FileInput', () => {
       mockFiles(SOLUTION_FILES)
     })
 
-    test('bubbles the error', async () => {
+    it('bubbles the error', async () => {
       const input = new FileInput('/path/to/solution/two-fer.js')
       await expect(input.read()).rejects.toMatchObject({
         errno: 34,

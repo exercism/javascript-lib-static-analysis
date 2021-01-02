@@ -25,21 +25,21 @@ describe('DirectoryInput', () => {
       mockFiles(SOLUTION_FILES)
     })
 
-    test('can find a source file', async () => {
+    it('can find a source file', async () => {
       const input = new DirectoryInput('/path/to/solution', 'two-fer')
       const files = await input.read(1)
 
       expect(files.length).toBe(1)
     })
 
-    test('it excludes files that are not .js', async () => {
+    it('excludes files that are not .js', async () => {
       const input = new DirectoryInput('/path/to/solution', 'two-fer')
       const files = await input.read(Object.keys(SOLUTION_FILES).length)
 
       expect(files).not.toContain(SOLUTION_FILES['/path/to/solution/README.md'])
     })
 
-    test('it excludes files that are .spec.js', async () => {
+    it('excludes files that are .spec.js', async () => {
       const input = new DirectoryInput('/path/to/solution', 'two-fer')
       const files = await input.read(Object.keys(SOLUTION_FILES).length)
 
@@ -48,7 +48,7 @@ describe('DirectoryInput', () => {
       )
     })
 
-    test('it prefers <slug>.js', async () => {
+    it('prefers <slug>.js', async () => {
       const input = new DirectoryInput('/path/to/solution', 'two-fer')
       const [file, ...others] = await input.read(1)
 
@@ -67,7 +67,7 @@ describe('DirectoryInput', () => {
       mockFiles(SOLUTION_FILES)
     })
 
-    test('can not find a source file', async () => {
+    it('can not find a source file', async () => {
       const input = new DirectoryInput('/path/to/solution', 'two-fer')
       const files = await input.read(1)
 
@@ -101,14 +101,14 @@ describe('DirectoryInput', () => {
       mockFiles(SOLUTION_FILES)
     })
 
-    test('can find a source file', async () => {
+    it('can find a source file', async () => {
       const input = new DirectoryInput('/path/to/solution', 'two-fer')
       const files = await input.read(1)
 
       expect(files.length).toBe(1)
     })
 
-    test('it excludes files that are not .js', async () => {
+    it('excludes files that are not .js', async () => {
       const input = new DirectoryInput('/path/to/solution', 'two-fer')
       const files = await input.read(Object.keys(SOLUTION_FILES).length)
 
@@ -125,7 +125,7 @@ describe('DirectoryInput', () => {
       )
     })
 
-    test('it excludes files that are .spec.js', async () => {
+    it('excludes files that are .spec.js', async () => {
       const input = new DirectoryInput('/path/to/solution', 'two-fer')
       const files = await input.read(Object.keys(SOLUTION_FILES).length)
 
@@ -134,7 +134,7 @@ describe('DirectoryInput', () => {
       )
     })
 
-    test('it excludes files that are configuration', async () => {
+    it('excludes files that are configuration', async () => {
       const input = new DirectoryInput('/path/to/solution', 'two-fer')
       const files = await input.read(Object.keys(SOLUTION_FILES).length)
 
@@ -149,7 +149,7 @@ describe('DirectoryInput', () => {
       )
     })
 
-    test('it prefers <slug>.js', async () => {
+    it('prefers <slug>.js', async () => {
       const input = new DirectoryInput('/path/to/solution', 'two-fer')
       const [file, ...others] = await input.read(1)
 
