@@ -1,5 +1,5 @@
-import { InlineInput } from './helpers/input/InlineInput'
 import { AstParser } from '~src/AstParser'
+import { InlineInput } from '~src/input/InlineInput'
 
 const INPUT = new InlineInput([
   `
