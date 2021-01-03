@@ -1,6 +1,6 @@
 {
   "name": "@exercism/static-analysis",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Exercism static analysis library for javascript and typescript",
   "repository": "https://github.com/SleeplessByte/exercism-static-analysis",
   "author": "Derk-Jan Karrenbeld <derk-jan+github@karrenbeld.info>",

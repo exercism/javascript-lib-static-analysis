@@ -1,6 +1,6 @@
 import { AstParser } from '~src/AstParser'
 import { extractVariables } from '~src/extracts/extract_variables'
-import { InlineInput } from '../helpers/input/InlineInput'
+import { InlineInput } from '~src/input/InlineInput'
 
 describe('extractVariables', () => {
   it('finds a top level variable', async () => {

@@ -1,7 +1,6 @@
 import { AstParser } from '~src/AstParser'
-import { extractSource } from '~src/extracts/extract_source'
 import { extractTests } from '~src/extracts/extract_tests'
-import { InlineInput } from '../helpers/input/InlineInput'
+import { InlineInput } from '~src/input/InlineInput'
 
 describe('extractTests', () => {
   it('finds a top level test', async () => {
@@ -11,7 +10,7 @@ describe('extractTests', () => {
         expect(false).not.toBe(true)
       })`,
     ])
-    const [{ program, source }] = await AstParser.ANALYZER.parse(input)
+    const [{ program }] = await AstParser.ANALYZER.parse(input)
 
     const [foundTest, ...others] = extractTests(program)
 

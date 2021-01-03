@@ -1,8 +1,7 @@
 import { AstParser } from '~src/AstParser'
 import { extractVariables } from '~src/extracts/extract_variables'
 import { isLiteral } from '~src/guards/is_literal'
-import { findTopLevelConstants } from '~src/queries/find_top_level_constants'
-import { InlineInput } from '../helpers/input/InlineInput'
+import { InlineInput } from '~src/input/InlineInput'
 
 const literalsP = AstParser.ANALYZER.parse(
   new InlineInput([

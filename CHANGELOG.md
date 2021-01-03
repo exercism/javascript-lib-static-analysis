@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.3.1
+
+- Add strict typing to `AstTraverser`
+- Remove duplicated `InlineInput` from test helpers
+
 ## 0.3.0
 
 - Add extracts:
