@@ -1,17 +1,26 @@
 import { AST_NODE_TYPES, TSESTree } from '@typescript-eslint/typescript-estree'
-import { isMemberExpression, SpecificObject, SpecificProperty } from './is_member_expression'
+import {
+  isMemberExpression,
+  SpecificObject,
+  SpecificProperty,
+} from './is_member_expression'
 import { isIdentifier } from './is_identifier'
 
 type Node = TSESTree.Node
 type CallExpression = TSESTree.CallExpression
 type Identifier = TSESTree.Identifier
 
-type SpecificFunctionCall<C> = CallExpression & {
+export type SpecificFunctionCall<C> = CallExpression & {
   callee: Identifier & { name: C }
 }
-type SpecificObjectCall<O> = CallExpression & { callee: SpecificObject<O> }
-type SpecificPropertyCall<P> = CallExpression & { callee: SpecificProperty<P> }
-type SpecificObjectPropertyCall<O, P> = SpecificObjectCall<O> & SpecificPropertyCall<P>
+export type SpecificObjectCall<O> = CallExpression & {
+  callee: SpecificObject<O>
+}
+export type SpecificPropertyCall<P> = CallExpression & {
+  callee: SpecificProperty<P>
+}
+export type SpecificObjectPropertyCall<O, P> = SpecificObjectCall<O> &
+  SpecificPropertyCall<P>
 
 export function isCallExpression<O extends string, C extends string>(
   node: Node,
@@ -24,14 +33,16 @@ export function isCallExpression<O extends string, P extends string>(
 ): node is SpecificObjectPropertyCall<O, P>
 export function isCallExpression<O extends string>(
   node: Node,
-  object: O,
-  property?: undefined
+  object: O
 ): node is SpecificObjectCall<O>
 export function isCallExpression<P extends string>(
   node: Node,
   object: undefined,
   property: P
 ): node is SpecificPropertyCall<P>
+export function isCallExpression<P extends string>(
+  node: Node
+): node is CallExpression
 
 export function isCallExpression<
   O extends string | undefined,
@@ -48,9 +59,9 @@ export function isCallExpression<
     }
   }
 
-  return (
-    node.type === AST_NODE_TYPES.CallExpression &&
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    isMemberExpression<any, any>(node.callee, object, property)
-  )
+  if (!object && !property) {
+    return true
+  }
+
+  return isMemberExpression<string, string>(node.callee, object!, property!)
 }

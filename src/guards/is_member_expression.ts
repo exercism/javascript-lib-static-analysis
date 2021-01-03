@@ -31,6 +31,7 @@ export function isMemberExpression<P extends string>(
   property: P
 ): node is SpecificProperty<P>
 export function isMemberExpression(node: Node): node is MemberExpression
+
 export function isMemberExpression<O extends string, P extends string | number>(
   node: Node,
   object?: O,

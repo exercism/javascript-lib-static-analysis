@@ -39,6 +39,11 @@ export class Export {
   }
 }
 
+/**
+ *
+ * @param root
+ * @see https://astexplorer.net/#/gist/2aa27ed655187c1db5badd04522e7784/4789aa42e4b53af9f7cfb39e448a5d64fbc2e9b5
+ */
 export function extractExports(root: Node): Export[] {
   const exports: Export[] = []
 

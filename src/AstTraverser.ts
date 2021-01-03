@@ -86,7 +86,7 @@ export class AstTraverser {
       return
     }
 
-    if (!skipChildren && !this.skipped) {
+    if (!this.skipped) {
       const keys = getVisitorKeysForNode(this.allVisitorKeys, node)
 
       for (const key of keys) {
@@ -100,7 +100,7 @@ export class AstTraverser {
             return
           }
 
-          this.traverse(child, node, this.skipped)
+          this.traverse(child, node)
         }
       }
     }
