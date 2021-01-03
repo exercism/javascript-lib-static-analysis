@@ -4,7 +4,11 @@ type Node = TSESTree.Node
 type Literal = TSESTree.Literal
 type LiteralValue = string | number | boolean | RegExp | bigint | null
 
-export function isLiteral(node: Node, value?: LiteralValue, raw?: string): node is Literal {
+export function isLiteral(
+  node: Node,
+  value?: LiteralValue,
+  raw?: string
+): node is Literal {
   return (
     node.type === AST_NODE_TYPES.Literal &&
     (value === undefined || node.value === value) &&

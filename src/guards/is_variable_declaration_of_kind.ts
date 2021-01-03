@@ -3,7 +3,9 @@ import { TSESTree, AST_NODE_TYPES } from '@typescript-eslint/typescript-estree'
 type Node = TSESTree.Node
 type Kind = TSESTree.VariableDeclaration['kind']
 
-type VariableDeclarationOfKind<T extends Kind> = TSESTree.VariableDeclaration & { kind: T }
+type VariableDeclarationOfKind<
+  T extends Kind
+> = TSESTree.VariableDeclaration & { kind: T }
 
 export function isVariableDeclarationOfKind(
   node: Node,
@@ -37,7 +39,10 @@ export function isVariableDeclarationOfKind(
   node: Node,
   kinds: readonly Kind[]
 ): node is VariableDeclarationOfKind<Kind> {
-  if (node.type !== AST_NODE_TYPES.VariableDeclaration || !kinds.includes(node.kind)) {
+  if (
+    node.type !== AST_NODE_TYPES.VariableDeclaration ||
+    !kinds.includes(node.kind)
+  ) {
     return false
   }
 

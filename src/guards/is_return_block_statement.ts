@@ -6,7 +6,9 @@ type BlockStatement = TSESTree.BlockStatement
 
 type BlockWithReturnStatement = BlockStatement & { body: [ReturnStatement] }
 
-export function isReturnBlockStatement(node: Node): node is BlockWithReturnStatement {
+export function isReturnBlockStatement(
+  node: Node
+): node is BlockWithReturnStatement {
   return (
     node.type === AST_NODE_TYPES.BlockStatement &&
     node.body.length === 1 &&

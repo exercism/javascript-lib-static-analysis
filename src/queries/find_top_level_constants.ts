@@ -6,10 +6,15 @@ import { AstTraverser } from '../AstTraverser'
 type Node = TSESTree.Node
 type VariableDeclaration = TSESTree.VariableDeclaration
 type VariableDeclarator = TSESTree.VariableDeclarator
-export type ProgramConstant = VariableDeclarator & { kind: VariableDeclaration['kind'] }
+export type ProgramConstant = VariableDeclarator & {
+  kind: VariableDeclaration['kind']
+}
 export type ProgramConstants = ProgramConstant[]
 
-const CONSTANT_MODIFIERS = [AST_NODE_TYPES.Program, AST_NODE_TYPES.ExportNamedDeclaration]
+const CONSTANT_MODIFIERS = [
+  AST_NODE_TYPES.Program,
+  AST_NODE_TYPES.ExportNamedDeclaration,
+]
 
 function isTopLevelConstant(
   this: AstTraverser,
@@ -37,18 +42,25 @@ export function findTopLevelConstants(
   root: Node,
   kinds: readonly VariableDeclaration['kind'][] = ['const']
 ): ProgramConstants {
-  const constants = findAll(root, function (this: AstTraverser, node): node is VariableDeclaration {
-    if (isTopLevelConstant.call(this, node, kinds)) {
-      this.skip()
-      return true
-    }
+  const constants = findAll(
+    root,
+    function (this: AstTraverser, node): node is VariableDeclaration {
+      if (isTopLevelConstant.call(this, node, kinds)) {
+        this.skip()
+        return true
+      }
 
-    return false
-  }) as VariableDeclaration[]
+      return false
+    }
+  ) as VariableDeclaration[]
 
   return constants.reduce(
     (declarations, declaration): ProgramConstants =>
-      declarations.concat(declaration.declarations.map((d): ProgramConstant => ({ ...d, kind: declaration.kind }))),
+      declarations.concat(
+        declaration.declarations.map(
+          (d): ProgramConstant => ({ ...d, kind: declaration.kind })
+        )
+      ),
     [] as ProgramConstants
   )
 }

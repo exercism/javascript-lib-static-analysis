@@ -25,7 +25,10 @@ type Node = TSESTree.Node
  * @param predicate predicate function that gets the traverse as bound this
  * @returns the nodes that return true for the predicate
  */
-export function findAll<T extends Node>(root: Node, predicate: (node: Node) => node is T): T[] {
+export function findAll<T extends Node>(
+  root: Node,
+  predicate: (node: Node) => node is T
+): T[] {
   const results: T[] = []
 
   traverse(root, {

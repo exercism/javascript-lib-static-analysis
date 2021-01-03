@@ -7,6 +7,7 @@
   - `extractSource`
 - Add exports for typeguard return types for `isCallExpression`
 - Add helper functions to extract test code
+
 ## 0.2.0
 
 - Add Traverser (with support for `break/stop` and `skip/shallow`)

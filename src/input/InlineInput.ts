@@ -1,4 +1,4 @@
-import { Input } from "./Input"
+import { Input } from './Input'
 
 export class InlineInput implements Input {
   /**
@@ -24,6 +24,6 @@ export class InlineInput implements Input {
   }
 
   public async informativeBail(): Promise<never> {
-    return Promise.reject(new Error("No source files gives"))
+    return Promise.reject(new Error('No source files gives'))
   }
 }

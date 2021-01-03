@@ -6,7 +6,10 @@ type Node = TSESTree.Node
 type Literal = TSESTree.Literal
 type LiteralValue = string | number | boolean | RegExp | null
 
-export function findLiteral(root: Node, value: LiteralValue): Literal | undefined {
+export function findLiteral(
+  root: Node,
+  value: LiteralValue
+): Literal | undefined {
   const isLiteralValue = (node: Node): node is Literal => isLiteral(node, value)
   return findFirst(root, isLiteralValue)
 }
