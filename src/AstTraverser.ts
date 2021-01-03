@@ -1,5 +1,5 @@
 import { visitorKeys } from '@typescript-eslint/visitor-keys'
-import { TSESTree } from '@typescript-eslint/typescript-estree'
+import { AST_NODE_TYPES, TSESTree } from '@typescript-eslint/typescript-estree'
 
 type Node = TSESTree.Node
 
@@ -21,15 +21,16 @@ function getVisitorKeysForNode(
 }
 
 type TraverseOptions = {
-  [key: string]: (
+  [key in Node['type']]?: (
     this: AstTraverser,
     node: Node,
     parent: Node | undefined
   ) => void
-} & Partial<{
-  enter: (this: AstTraverser, node: Node, parent: Node | undefined) => void
-  exit: (this: AstTraverser, node: Node, parent: Node | undefined) => void
-}>
+} &
+  Partial<{
+    enter: (this: AstTraverser, node: Node, parent: Node | undefined) => void
+    exit: (this: AstTraverser, node: Node, parent: Node | undefined) => void
+  }>
 
 export class AstTraverser {
   private readonly allVisitorKeys = visitorKeys

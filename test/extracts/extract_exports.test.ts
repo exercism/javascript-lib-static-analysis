@@ -1,6 +1,6 @@
 import { AstParser } from '~src/AstParser'
-import { extractExports, ANONYMOUS } from '~src/extracts/extract_exports'
-import { InlineInput } from '../helpers/input/InlineInput'
+import { ANONYMOUS, extractExports } from '~src/extracts/extract_exports'
+import { InlineInput } from '~src/input/InlineInput'
 
 describe('extractExports', () => {
   describe('export named declarations', () => {

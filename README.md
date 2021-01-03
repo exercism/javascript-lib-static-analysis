@@ -1,5 +1,6 @@
 # exercism-static-analysis
 
+> You can use [AstExplorer](https://astexplorer.net/) to preview the output of the parser.
 ## Installation
 
 Add this library to your project in `package.json`, for example via:
@@ -28,7 +29,7 @@ Any compatible `Input` works, made available to you are:
 - [`DirectoryInput`](https://github.com/SleeplessByte/exercism-static-analysis/blob/main/src/input/DirectoryInput.ts) whichs takes a directory, and uses the `TrackOptions` to filter them out
 - [`InlineInput`](https://github.com/SleeplessByte/exercism-static-analysis/blob/main/src/input/InlineInput.ts) which takes inline string(s) as source(s)
 
-By default, the `AstParser` will only parse a single file, but it's possible to parse as many files as necessary. In the case of `DirectoryInput`, it will search for the most applicable file, based on the `TrackOptions`. 
+By default, the `AstParser` will only parse a single file, but it's possible to parse as many files as necessary. In the case of `DirectoryInput`, it will search for the most applicable file, based on the `TrackOptions`.
 
 ### Parsers
 
@@ -36,7 +37,7 @@ The parsers with recommended configuration for certain jobs are assigned as stat
 
 - [`AstParser.ANALYZER`](https://github.com/SleeplessByte/exercism-static-analysis/blob/main/src/AstParser.ts#L96-L100): Holds a parser that is recommended for analysis. This means that it dóés hold locational information (in order to be able to extract tokens), but does not hold any commentary. You **can** `extractSource` code using this parser.
 - [`AstParser.REPRESENTER`](https://github.com/SleeplessByte/exercism-static-analysis/blob/main/src/AstParser.ts#L85-L89): Holds a parser that is recommended for representing. This means that it does not hold locational information (where differences are caused bwhitespace differences) or commentary. You **cannot** `extractSource` code using this parser.
-- `new AstParser(options, n)`: Setup your own parser, which also allows to parse more than one file by changing the `n` variable. 
+- `new AstParser(options, n)`: Setup your own parser, which also allows to parse more than one file by changing the `n` variable.
 
 ### Guards
 
@@ -67,11 +68,11 @@ traverse(root, {
   enter(node): void {
     // When a node is entered
   },
-    
+
   exit(node): void {
     // when a node is exited
   },
-  
+
   [AST_NODE_TYPES.ArrayExpression]: void {
     // when a node with node.type === AST_NODE_TYPES.ArrayExpression is entered
   }
@@ -85,7 +86,7 @@ All the functions (`enter`, `exit`, `[type]`) are optional. _Inside_ each functi
 
 ### Extracts
 
-It's also possible to extract certain common items from a source or subtree. 
+It's also possible to extract certain common items from a source or subtree.
 
 - `extractExports`
 - `extractSource`

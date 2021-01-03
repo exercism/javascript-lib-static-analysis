@@ -1,8 +1,8 @@
 import { AST_NODE_TYPES, TSESTree } from '@typescript-eslint/typescript-estree'
-import { isIdentifier } from '../guards/is_identifier'
 import { traverse } from '../AstTraverser'
-import { isMemberExpression } from '../guards/is_member_expression'
+import { isIdentifier } from '../guards/is_identifier'
 import { isLiteral } from '../guards/is_literal'
+import { isMemberExpression } from '../guards/is_member_expression'
 
 export const ANONYMOUS = '__anonymous'
 
