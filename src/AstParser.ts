@@ -112,7 +112,10 @@ export class AstParser {
    */
   public async parse(input: Input): Promise<ParsedSource[]> {
     const sources = await input.read(this.n)
+    return this.parseSync(...sources)
+  }
 
+  public parseSync(...sources: string[]): ParsedSource[] {
     const logger = getProcessLogger()
 
     logger.log(`=> inputs: ${sources.length}`)

@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.4.0
+
+- Add inline synchronous parsing for test reporter
+
 ## 0.3.1
 
 - Add strict typing to `AstTraverser`
