@@ -10,7 +10,8 @@
     "build": "yarn build:code && yarn build:types",
     "build:code": "yarn babel src --out-dir dist --extensions .ts",
     "build:types": "tsc --declaration --emitDeclarationOnly --outDir dist",
-    "prepublish": "yarn test && yarn build",
+    "prepare": "yarn build",
+    "prepublishOnly": "yarn test && yarn lint",
     "lint": "yarn eslint . --ext ts,js,tsx,jsx,mjs",
     "test": "jest"
   },
