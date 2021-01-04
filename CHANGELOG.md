@@ -1,8 +1,16 @@
 # Changelog
 
-## 0.4.0
+## 0.4.2
+
+- Fix glue argument type for `TestCase#name`
+
+## 0.4.1
 
 - Add inline synchronous parsing for test reporter
+
+## 0.4.0
+
+~Incorrectly published package~
 
 ## 0.3.1
 

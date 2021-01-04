@@ -96,7 +96,7 @@ export class TestCase {
     //
   }
 
-  public name(glue: ' > '): string {
+  public name(glue = ' > '): string {
     return [...this.description, this.test].join(glue)
   }
 
