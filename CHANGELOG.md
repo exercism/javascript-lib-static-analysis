@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.5.0
+
+- Add re-exports. This increases file-size and potentially decreases tree-shakability, but oh boi does it increase the DX
+- Change compilation target to node 12.x+, instead of current node
+
 ## 0.4.2
 
 - Fix glue argument type for `TestCase#name`

@@ -1,11 +1,9 @@
 import { AST_NODE_TYPES, TSESTree } from '@typescript-eslint/typescript-estree'
-import { isIdentifier } from './is_identifier'
-import { isLiteral } from './is_literal'
+import { Identifier, guardIdentifier } from './is_identifier'
+import { Literal, guardLiteral } from './is_literal'
 
 type Node = TSESTree.Node
-type MemberExpression = TSESTree.MemberExpression
-type Identifier = TSESTree.Identifier
-type Literal = TSESTree.Literal
+export type MemberExpression = TSESTree.MemberExpression
 
 export type SpecificObject<O> = MemberExpression & {
   object: Identifier & { name: O }
@@ -16,32 +14,37 @@ export type SpecificProperty<P> = MemberExpression & {
 export type SpecificObjectProperty<O, P> = SpecificObject<O> &
   SpecificProperty<P>
 
-export function isMemberExpression<O extends string, P extends string | number>(
-  node: Node,
-  object: O,
-  property: P
-): node is SpecificObjectProperty<O, P>
-export function isMemberExpression<O extends string>(
+export function guardMemberExpression<
+  O extends string,
+  P extends string | number
+>(node: Node, object: O, property: P): node is SpecificObjectProperty<O, P>
+export function guardMemberExpression<O extends string>(
   node: Node,
   object: O
 ): node is SpecificObject<O>
-export function isMemberExpression<P extends string>(
+export function guardMemberExpression<P extends string>(
   node: Node,
   object: undefined,
   property: P
 ): node is SpecificProperty<P>
-export function isMemberExpression(node: Node): node is MemberExpression
+export function guardMemberExpression(node: Node): node is MemberExpression
 
-export function isMemberExpression<O extends string, P extends string | number>(
-  node: Node,
-  object?: O,
-  property?: P
-): node is MemberExpression {
+export function guardMemberExpression<
+  O extends string,
+  P extends string | number
+>(node: Node, object?: O, property?: P): node is MemberExpression {
   return (
     node.type === AST_NODE_TYPES.MemberExpression &&
-    (typeof object === 'undefined' || isIdentifier<O>(node.object, object)) &&
+    (typeof object === 'undefined' ||
+      guardIdentifier<O>(node.object, object)) &&
     (typeof property === 'undefined' ||
-      isIdentifier<string>(node.property, property as string) ||
-      isLiteral(node.property, property))
+      guardIdentifier<string>(node.property, property as string) ||
+      guardLiteral(node.property, property))
   )
 }
+
+/**
+ * @deprecated use guardMemberExpression because this clashes with a
+ *   typescript internal name (which makes it harder to import this)
+ */
+export const isMemberExpression = guardMemberExpression

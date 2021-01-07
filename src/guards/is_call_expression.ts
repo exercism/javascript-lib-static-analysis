@@ -1,14 +1,13 @@
 import { AST_NODE_TYPES, TSESTree } from '@typescript-eslint/typescript-estree'
 import {
-  isMemberExpression,
+  guardMemberExpression,
   SpecificObject,
   SpecificProperty,
 } from './is_member_expression'
-import { isIdentifier } from './is_identifier'
+import { guardIdentifier, Identifier } from './is_identifier'
 
 type Node = TSESTree.Node
-type CallExpression = TSESTree.CallExpression
-type Identifier = TSESTree.Identifier
+export type CallExpression = TSESTree.CallExpression
 
 export type SpecificFunctionCall<C> = CallExpression & {
   callee: Identifier & { name: C }
@@ -22,29 +21,29 @@ export type SpecificPropertyCall<P> = CallExpression & {
 export type SpecificObjectPropertyCall<O, P> = SpecificObjectCall<O> &
   SpecificPropertyCall<P>
 
-export function isCallExpression<O extends string, C extends string>(
+export function guardCallExpression<O extends string, C extends string>(
   node: Node,
   callee: C
 ): node is SpecificFunctionCall<C>
-export function isCallExpression<O extends string, P extends string>(
+export function guardCallExpression<O extends string, P extends string>(
   node: Node,
   object: O,
   property: P
 ): node is SpecificObjectPropertyCall<O, P>
-export function isCallExpression<O extends string>(
+export function guardCallExpression<O extends string>(
   node: Node,
   object: O
 ): node is SpecificObjectCall<O>
-export function isCallExpression<P extends string>(
+export function guardCallExpression<P extends string>(
   node: Node,
   object: undefined,
   property: P
 ): node is SpecificPropertyCall<P>
-export function isCallExpression<P extends string>(
+export function guardCallExpression<P extends string>(
   node: Node
 ): node is CallExpression
 
-export function isCallExpression<
+export function guardCallExpression<
   O extends string | undefined,
   P extends string | undefined,
   C extends string | undefined
@@ -54,7 +53,7 @@ export function isCallExpression<
   }
 
   if (typeof object === 'string' && !property) {
-    if (isIdentifier(node.callee, object)) {
+    if (guardIdentifier(node.callee, object)) {
       return true
     }
   }
@@ -63,5 +62,11 @@ export function isCallExpression<
     return true
   }
 
-  return isMemberExpression<string, string>(node.callee, object!, property!)
+  return guardMemberExpression<string, string>(node.callee, object!, property!)
 }
+
+/**
+ * @deprecated use guardCallExpression because this clashes with a
+ *   typescript internal name (which makes it harder to import this)
+ */
+export const isCallExpression = guardCallExpression

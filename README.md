@@ -1,8 +1,10 @@
-# exercism-static-analysis
+# @exercism/static-analysis
 
 > You can use [AstExplorer](https://astexplorer.net/) to preview the output of the parser.
 
 ## Installation
+
+> You need at least Node 12.x in order to maintain or use this library. This is due to the fact that babel is configured to polyfill as if you're running Node 12.x or higher. `jest` will fail to run the tests if you run a lower node, and some of the code might not be transpiled correctly. If you *MUST* use this library in conjunction with a lower Node version, ensure to re-transpile this module.
 
 Add this library to your project in `package.json`, for example via:
 
@@ -45,9 +47,9 @@ The parsers with recommended configuration for certain jobs are assigned as stat
 Guards are named helpers that also work as [type guards](https://www.typescriptlang.org/docs/handbook/advanced-types.html#type-guards-and-differentiating-types). You can find them [here](https://github.com/SleeplessByte/exercism-static-analysis/tree/main/src/guards), and they are imported like this:
 
 ```typescript
-import { isIdentifier } from '@exercism/statis-analysis/dist/guards/is_identifier'
-import { isLiteral } from '@exercism/statis-analysis/dist/guards/is_literal'
-import { isMemberExpression } from '@exercism/statis-analysis/dist/guards/is_member_expression'
+import { guardIdentifier } from '@exercism/statis-analysis'
+import { guardLiteral } from '@exercism/statis-analysis'
+import { guardMemberExpression } from '@exercism/statis-analysis'
 // etc
 ```
 
@@ -56,14 +58,14 @@ import { isMemberExpression } from '@exercism/statis-analysis/dist/guards/is_mem
 Queries utilise the `AstTraverser` to find and/or collect certain node. You can find them [here](https://github.com/SleeplessByte/exercism-static-analysis/tree/main/src/queries), and the are imported like this:
 
 ```typescript
-import { findFirst } from '@exercism/statis-analysis/dist/queries/find_first'
+import { findFirst } from '@exercism/statis-analysis'
 // etc
 ```
 
 Manual traversing is also possible using the more low-level `AstTraverser` (and `traverse` helper function):
 
 ```typescript
-import { traverse } from '@exercism/static-analysis/dist/AstTraverser'
+import { traverse } from '@exercism/static-analysis'
 
 traverse(root, {
   enter(node): void {
