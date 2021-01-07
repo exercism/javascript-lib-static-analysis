@@ -4,6 +4,7 @@
 
 - Add re-exports. This increases file-size and potentially decreases tree-shakability, but oh boi does it increase the DX
 - Change compilation target to node 12.x+, instead of current node
+- Support `exports` (instead of only `module.exports`)
 
 ## 0.4.2
 
