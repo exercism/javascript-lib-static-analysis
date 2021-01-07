@@ -13,7 +13,8 @@ export function guardAssignmentPattern(
     node.type === AST_NODE_TYPES.AssignmentPattern &&
     (value === undefined ||
       (node.right !== undefined &&
-        (guardLiteral(node.right, value) || guardIdentifier(node.right, value))))
+        (guardLiteral(node.right, value) ||
+          guardIdentifier(node.right, value))))
   )
 }
 

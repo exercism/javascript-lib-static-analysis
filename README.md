@@ -4,7 +4,7 @@
 
 ## Installation
 
-> You need at least Node 12.x in order to maintain or use this library. This is due to the fact that babel is configured to polyfill as if you're running Node 12.x or higher. `jest` will fail to run the tests if you run a lower node, and some of the code might not be transpiled correctly. If you *MUST* use this library in conjunction with a lower Node version, ensure to re-transpile this module.
+> You need at least Node 12.x in order to maintain or use this library. This is due to the fact that babel is configured to polyfill as if you're running Node 12.x or higher. `jest` will fail to run the tests if you run a lower node, and some of the code might not be transpiled correctly. If you _MUST_ use this library in conjunction with a lower Node version, ensure to re-transpile this module.
 
 Add this library to your project in `package.json`, for example via:
 
