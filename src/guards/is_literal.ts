@@ -1,10 +1,10 @@
 import { AST_NODE_TYPES, TSESTree } from '@typescript-eslint/typescript-estree'
 
 type Node = TSESTree.Node
-type Literal = TSESTree.Literal
-type LiteralValue = string | number | boolean | RegExp | bigint | null
+export type Literal = TSESTree.Literal
+export type LiteralValue = string | number | boolean | RegExp | bigint | null
 
-export function isLiteral(
+export function guardLiteral(
   node: Node,
   value?: LiteralValue,
   raw?: string
@@ -15,3 +15,9 @@ export function isLiteral(
     (raw === undefined || node.raw === raw)
   )
 }
+
+/**
+ * @deprecated use guardLiteral because this clashes with a
+ *   typescript internal name (which makes it harder to import this)
+ */
+export const isLiteral = guardLiteral

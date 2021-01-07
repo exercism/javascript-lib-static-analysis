@@ -9,7 +9,7 @@ import { getProcessLogger } from './utils/logger'
 
 type Program = TSESTree.Program
 
-interface ParseOptions {
+export interface ParseOptions {
   /**
    * create a top-level comments array containing all comments
    */

@@ -1,9 +1,9 @@
 import { AST_NODE_TYPES, TSESTree } from '@typescript-eslint/typescript-estree'
 
 type Node = TSESTree.Node
-type LogicalExpression = TSESTree.LogicalExpression
+export type LogicalExpression = TSESTree.LogicalExpression
 
-export function isLogicalExpression(
+export function guardLogicalExpression(
   node: Node,
   operator?: string
 ): node is LogicalExpression {
@@ -12,3 +12,9 @@ export function isLogicalExpression(
     (operator === undefined || node.operator === operator)
   )
 }
+
+/**
+ * @deprecated use guardLogicalExpression because this clashes with a
+ *   typescript internal name (which makes it harder to import this)
+ */
+export const isLogicalExpression = guardLogicalExpression

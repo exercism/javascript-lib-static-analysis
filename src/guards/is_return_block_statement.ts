@@ -1,12 +1,12 @@
 import { AST_NODE_TYPES, TSESTree } from '@typescript-eslint/typescript-estree'
 
 type Node = TSESTree.Node
-type ReturnStatement = TSESTree.ReturnStatement
-type BlockStatement = TSESTree.BlockStatement
 
-type BlockWithReturnStatement = BlockStatement & { body: [ReturnStatement] }
+export type BlockWithReturnStatement = TSESTree.BlockStatement & {
+  body: [TSESTree.ReturnStatement]
+}
 
-export function isReturnBlockStatement(
+export function guardReturnBlockStatement(
   node: Node
 ): node is BlockWithReturnStatement {
   return (
@@ -15,3 +15,9 @@ export function isReturnBlockStatement(
     node.body[0].type === AST_NODE_TYPES.ReturnStatement
   )
 }
+
+/**
+ * @deprecated use guardReturnBlockStatement because this clashes with a
+ *   typescript internal name (which makes it harder to import this)
+ */
+export const isReturnBlockStatement = guardReturnBlockStatement
