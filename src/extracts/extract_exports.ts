@@ -1,20 +1,21 @@
 import { AST_NODE_TYPES, TSESTree } from '@typescript-eslint/typescript-estree'
+import { Expression } from 'typescript'
 import { traverse } from '../AstTraverser'
-import { isIdentifier } from '../guards/is_identifier'
-import { isLiteral } from '../guards/is_literal'
-import { isMemberExpression } from '../guards/is_member_expression'
+import { guardIdentifier } from '../guards/is_identifier'
+import { guardLiteral } from '../guards/is_literal'
+import { guardMemberExpression } from '../guards/is_member_expression'
 
 export const ANONYMOUS = '__anonymous'
 
 type Node = TSESTree.Node
-type ExportNode =
+export type ExportNode =
   | TSESTree.ExportAllDeclaration
   | TSESTree.ExportNamedDeclaration
   | TSESTree.ExportDefaultDeclaration
   | (TSESTree.ExpressionStatement & {
       expression: TSESTree.AssignmentExpression
     })
-type ExportNamedDeclaration = TSESTree.ExportNamedDeclaration
+export type ExportNamedDeclaration = TSESTree.ExportNamedDeclaration
 
 export class Export {
   public readonly name: string | null
@@ -85,7 +86,7 @@ export function extractExports(root: Node): Export[] {
               //
               specifiers.forEach((specifier) => {
                 const localName =
-                  node.source && isLiteral(node.source)
+                  node.source && guardLiteral(node.source)
                     ? `${node.source.value}.${specifier.local.name}`
                     : specifier.local.name
 
@@ -149,7 +150,7 @@ export function extractExports(root: Node): Export[] {
               const { declarations } = declaration
               declarations.forEach((declarator) => {
                 // Other patterns such as export const [a, b] are not supported.
-                if (isIdentifier(declarator.id)) {
+                if (guardIdentifier(declarator.id)) {
                   exports.push(
                     new Export(
                       node,
@@ -305,10 +306,19 @@ export function extractExports(root: Node): Export[] {
           break
         }
 
+        // https://blog.tableflip.io/the-difference-between-module-exports-and-exports/
+        //
         // module.exports = { name }
         // module.exports = { bar: name }
         // module.exports.name = ...
         // module.exports.bar = name
+        //
+        // exports.name = ...
+        // exports.bar = name
+        //
+        // TODO: exports = module.exports = ...
+        // TODO: exports = module.exports = { name }
+        // TODO: exports = module.exports = { bar: name }
         case AST_NODE_TYPES.ExpressionStatement: {
           const { expression } = node
 
@@ -316,7 +326,7 @@ export function extractExports(root: Node): Export[] {
             case AST_NODE_TYPES.AssignmentExpression: {
               // module.exports = { ... }
               if (
-                isMemberExpression(expression.left, 'module', 'exports') &&
+                guardMemberExpression(expression.left, 'module', 'exports') &&
                 expression.operator === '=' &&
                 expression.right.type === AST_NODE_TYPES.ObjectExpression
               ) {
@@ -327,8 +337,8 @@ export function extractExports(root: Node): Export[] {
                   }
 
                   if (
-                    !isIdentifier(property.key) ||
-                    !isIdentifier(property.value)
+                    !guardIdentifier(property.key) ||
+                    !guardIdentifier(property.value)
                   ) {
                     // Nested expression are not supported
                     return
@@ -348,18 +358,18 @@ export function extractExports(root: Node): Export[] {
 
               // module.exports.name = ...
               if (
-                isMemberExpression(expression.left) &&
-                isMemberExpression(
+                guardMemberExpression(expression.left) &&
+                guardMemberExpression(
                   expression.left.object,
                   'module',
                   'exports'
                 ) &&
-                isIdentifier(expression.left.property)
+                guardIdentifier(expression.left.property)
               ) {
                 exports.push(
                   new Export(
                     { ...node, expression },
-                    isIdentifier(expression.right)
+                    guardIdentifier(expression.right)
                       ? expression.right.name
                       : ANONYMOUS,
                     expression.left.property.name,
@@ -369,6 +379,43 @@ export function extractExports(root: Node): Export[] {
                 )
               }
 
+              // exports.name = ...
+              // exports.bar = name
+              if (
+                guardMemberExpression(expression.left, 'exports') &&
+                guardIdentifier(expression.left.property)
+              ) {
+                const exportedName = expression.left.property.name
+
+                const exportingIdentifier = guardIdentifier(expression.right)
+                const exportingFunction =
+                  expression.right.type === AST_NODE_TYPES.FunctionExpression
+
+                // Exporting a binding, such as a previously declared variable
+                // or function
+                const localName = guardIdentifier(expression.right)
+                  ? expression.right.name
+                  : // Exporting an inline declared function
+                  expression.right.type === AST_NODE_TYPES.FunctionExpression &&
+                    guardIdentifier(expression.right.id)
+                  ? expression.right.id.name
+                  : exportedName
+
+                exports.push(
+                  new Export(
+                    { ...node, expression },
+                    localName,
+                    exportedName,
+                    'value',
+                    guardIdentifier(expression.right)
+                      ? 'identifier'
+                      : expression.right.type ===
+                        AST_NODE_TYPES.FunctionExpression
+                      ? 'function'
+                      : 'unknown'
+                  )
+                )
+              }
               break
             }
           }

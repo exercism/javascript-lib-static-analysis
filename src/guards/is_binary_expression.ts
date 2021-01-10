@@ -1,18 +1,18 @@
 import { AST_NODE_TYPES, TSESTree } from '@typescript-eslint/typescript-estree'
 
 type Node = TSESTree.Node
-type BinaryExpression = TSESTree.BinaryExpression
-type BinaryOperator = BinaryExpression['operator']
-type BinaryExpressionWithOperator<
+export type BinaryExpression = TSESTree.BinaryExpression
+export type BinaryOperator = BinaryExpression['operator']
+export type BinaryExpressionWithOperator<
   T extends BinaryOperator
 > = BinaryExpression & { operator: T }
 
-export function isBinaryExpression(node: Node): node is BinaryExpression
-export function isBinaryExpression<T extends BinaryOperator>(
+export function guardBinaryExpression(node: Node): node is BinaryExpression
+export function guardBinaryExpression<T extends BinaryOperator>(
   node: Node,
   operator: T
 ): node is BinaryExpressionWithOperator<T>
-export function isBinaryExpression(
+export function guardBinaryExpression(
   node: Node,
   operator?: string
 ): node is BinaryExpression {
@@ -21,3 +21,9 @@ export function isBinaryExpression(
     (operator === undefined || node.operator === operator)
   )
 }
+
+/**
+ * @deprecated use guardBinaryExpression because this clashes with a
+ *   typescript internal name (which makes it harder to import this)
+ */
+export const isBinaryExpression = guardBinaryExpression

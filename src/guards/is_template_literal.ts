@@ -1,9 +1,9 @@
 import { AST_NODE_TYPES, TSESTree } from '@typescript-eslint/typescript-estree'
 
 type Node = TSESTree.Node
-type TemplateLiteral = TSESTree.TemplateLiteral
+export type TemplateLiteral = TSESTree.TemplateLiteral
 
-export function isTemplateLiteral(
+export function guardTemplateLiteral(
   node: Node,
   quasis?: string[],
   _value?: string
@@ -14,3 +14,9 @@ export function isTemplateLiteral(
       node.quasis.every((q, i): boolean => quasis[i] === q.value.raw))
   )
 }
+
+/**
+ * @deprecated use guardTemplateLiteral because this clashes with a
+ *   typescript internal name (which makes it harder to import this)
+ */
+export const isTemplateLiteral = guardTemplateLiteral

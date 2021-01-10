@@ -1,20 +1,20 @@
 import { AST_NODE_TYPES, TSESTree } from '@typescript-eslint/typescript-estree'
 import { traverse } from '../AstTraverser'
 import {
-  isCallExpression,
+  CallExpression,
+  guardCallExpression,
   SpecificFunctionCall,
 } from '../guards/is_call_expression'
-import { isMemberExpression } from '../guards/is_member_expression'
-import { isLiteral } from '../guards/is_literal'
-import { isIdentifier } from '../guards/is_identifier'
+import { guardIdentifier } from '../guards/is_identifier'
+import { guardLiteral } from '../guards/is_literal'
+import { guardMemberExpression } from '../guards/is_member_expression'
 import { findFirst } from '../queries/find_first'
 import { extractSource } from './extract_source'
 
 type Node = TSESTree.Node
-type CallExpression = TSESTree.CallExpression
 
 function isDescribe(node: Node): node is CallExpression {
-  if (!isCallExpression(node)) {
+  if (!guardCallExpression(node)) {
     return false
   }
 
@@ -22,7 +22,7 @@ function isDescribe(node: Node): node is CallExpression {
 
   // describe('...')
   // xdescribe('...')
-  if (isIdentifier(callee)) {
+  if (guardIdentifier(callee)) {
     return ['describe', 'xdescribe'].some(
       (identifier) => callee.name === identifier
     )
@@ -34,15 +34,15 @@ function isDescribe(node: Node): node is CallExpression {
   // xdescribe.skip('...')
   // xdescribe.only('...')
   return (
-    isMemberExpression(node.callee, 'describe', 'skip') ||
-    isMemberExpression(node.callee, 'describe', 'only') ||
-    isMemberExpression(node.callee, 'xdescribe', 'skip') ||
-    isMemberExpression(node.callee, 'xdescribe', 'only')
+    guardMemberExpression(node.callee, 'describe', 'skip') ||
+    guardMemberExpression(node.callee, 'describe', 'only') ||
+    guardMemberExpression(node.callee, 'xdescribe', 'skip') ||
+    guardMemberExpression(node.callee, 'xdescribe', 'only')
   )
 }
 
 function isTest(node: Node): node is CallExpression {
-  if (!isCallExpression(node)) {
+  if (!guardCallExpression(node)) {
     return false
   }
 
@@ -53,13 +53,13 @@ function isTest(node: Node): node is CallExpression {
   //
   // it('...')
   // xit('...')
-  if (isIdentifier(callee)) {
+  if (guardIdentifier(callee)) {
     return ['test', 'xtest', 'it', 'xit'].some(
       (identifier) => callee.name === identifier
     )
   }
 
-  if (!isMemberExpression(callee)) {
+  if (!guardMemberExpression(callee)) {
     return false
   }
 
@@ -74,7 +74,7 @@ function isTest(node: Node): node is CallExpression {
   // it.only('...')
   // xit.skip('...')
   // xit.only('...')
-  if (isIdentifier(object) && isIdentifier(property)) {
+  if (guardIdentifier(object) && guardIdentifier(property)) {
     return (
       ['test', 'xtest', 'it', 'xit'].some((o) => object.name === o) &&
       ['skip', 'only'].some((p) => property.name === p)
@@ -166,7 +166,7 @@ function extractExpectations(testNode: Node): Expectation[] {
     const expectation = findFirst(
       statement,
       (node): node is SpecificFunctionCall<'expect'> =>
-        isCallExpression(node, 'expect')
+        guardCallExpression(node, 'expect')
     )
 
     if (expectation) {
@@ -202,7 +202,7 @@ export function extractTests(root: Node): TestCase[] {
           const testNameArgument = expression.arguments[0]
 
           if (
-            isLiteral(testNameArgument) &&
+            guardLiteral(testNameArgument) &&
             typeof testNameArgument.value === 'string'
           ) {
             currentDescription.push(testNameArgument.value)
@@ -233,7 +233,7 @@ export function extractTests(root: Node): TestCase[] {
           const [nameArgument, testArgument] = expression.arguments
 
           if (
-            isLiteral(nameArgument) &&
+            guardLiteral(nameArgument) &&
             typeof nameArgument.value === 'string' &&
             (testArgument.type === AST_NODE_TYPES.FunctionExpression ||
               testArgument.type === AST_NODE_TYPES.ArrowFunctionExpression)

@@ -1,6 +1,6 @@
 import { AST_NODE_TYPES, TSESTree } from '@typescript-eslint/typescript-estree'
 import { findAll } from '../queries/find_all'
-import { isIdentifier } from '../guards/is_identifier'
+import { guardIdentifier } from '../guards/is_identifier'
 
 type Node = TSESTree.Node
 type BindingName = TSESTree.BindingName
@@ -16,7 +16,7 @@ export class Variable {
     public readonly kind: VariableDeclaration['kind'],
     public readonly init: Expression | null
   ) {
-    this.name = isIdentifier(binding) ? binding.name : null
+    this.name = guardIdentifier(binding) ? binding.name : null
   }
 
   public get initialized(): boolean {
@@ -46,7 +46,7 @@ export function extractVariables(root: Node): Variable[] {
         case AST_NODE_TYPES.ArrayPattern: {
           return declarator.id.elements
             .map((element) => {
-              if (element === null || !isIdentifier(element)) {
+              if (element === null || !guardIdentifier(element)) {
                 return null
               }
 

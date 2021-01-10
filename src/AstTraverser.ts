@@ -1,5 +1,5 @@
 import { visitorKeys } from '@typescript-eslint/visitor-keys'
-import { AST_NODE_TYPES, TSESTree } from '@typescript-eslint/typescript-estree'
+import { TSESTree } from '@typescript-eslint/typescript-estree'
 
 type Node = TSESTree.Node
 

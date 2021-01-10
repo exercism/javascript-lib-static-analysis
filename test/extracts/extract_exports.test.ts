@@ -177,8 +177,11 @@ describe('extractExports', () => {
         [`module.exports.name = name`, 'name', 'name'],
         [`module.exports = { bar: name }`, 'name', 'bar'],
         [`module.exports.bar = name`, 'name', 'bar'],
+        [`exports.name = name`, 'name', 'name'],
+        [`exports.bar = name`, 'name', 'bar'],
+        [`exports.bar = function name() {}`, 'name', 'bar'],
       ],
-      unsupported: [],
+      unsupported: [[`exports = module.exports = { name }`, 'name', 'name']],
     }
 
     exports.supported.forEach(([source, local, exported]) => {
