@@ -23,7 +23,7 @@ function getVisitorKeysForNode(
 type TraverseOptions = {
   [key in Node['type']]?: (
     this: AstTraverser,
-    node: Node,
+    node: Node & { type: key },
     parent: Node | undefined
   ) => void
 } &
@@ -80,7 +80,15 @@ export class AstTraverser {
     }
 
     if (onSelector) {
-      onSelector.call(this, node, parent)
+      // Force the type here because TypeScript won't understand that because
+      // this was extracted using `[node.type]`, that means that the parameter
+      // type is correct. This widens the expected type to be a regular node,
+      // but it's actually node & { type: node.type }
+      ;(onSelector as (
+        this: AstTraverser,
+        node: Node,
+        parent: Node | undefined
+      ) => void).call(this, node, parent)
     }
 
     if (this.stopped) {

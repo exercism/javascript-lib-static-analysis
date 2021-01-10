@@ -84,14 +84,14 @@ function isTest(node: Node): node is CallExpression {
   return false
 }
 
-export class TestCase {
+export class ExtractedTestCase {
   constructor(
     public readonly testNode:
       | TSESTree.FunctionExpression
       | TSESTree.ArrowFunctionExpression,
     public readonly description: string[],
     public readonly test: string,
-    public readonly expectations: Expectation[]
+    public readonly expectations: ExtractedExpectation[]
   ) {
     //
   }
@@ -111,7 +111,7 @@ export class TestCase {
   }
 }
 
-export class Expectation {
+export class ExtractedExpectation {
   constructor(
     public readonly statement: TSESTree.ExpressionStatement,
     public readonly expect: TSESTree.Node,
@@ -149,8 +149,8 @@ export class Expectation {
   }
 }
 
-function extractExpectations(testNode: Node): Expectation[] {
-  const results: Expectation[] = []
+function extractExpectations(testNode: Node): ExtractedExpectation[] {
+  const results: ExtractedExpectation[] = []
   const statements: TSESTree.ExpressionStatement[] = []
 
   traverse(testNode, {
@@ -171,7 +171,11 @@ function extractExpectations(testNode: Node): Expectation[] {
 
     if (expectation) {
       results.push(
-        new Expectation(statement, expectation, expectation.arguments[0])
+        new ExtractedExpectation(
+          statement,
+          expectation,
+          expectation.arguments[0]
+        )
       )
     }
   })
@@ -179,8 +183,8 @@ function extractExpectations(testNode: Node): Expectation[] {
   return results
 }
 
-export function extractTests(root: Node): TestCase[] {
-  const results: TestCase[] = []
+export function extractTests(root: Node): ExtractedTestCase[] {
+  const results: ExtractedTestCase[] = []
   const currentDescription: string[] = []
 
   traverse(root, {
@@ -241,7 +245,7 @@ export function extractTests(root: Node): TestCase[] {
             const testName = nameArgument.value
 
             results.push(
-              new TestCase(
+              new ExtractedTestCase(
                 testArgument,
                 [...currentDescription],
                 testName,

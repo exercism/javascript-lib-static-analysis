@@ -1,6 +1,7 @@
+import { AnalysisError } from './AnalysisError'
 import { SOURCE_MISSING_ERROR } from './codes'
 
-export class NoSourceError extends Error {
+export class NoSourceError extends AnalysisError {
   public readonly code: typeof SOURCE_MISSING_ERROR
   public readonly expected: string
   public readonly available: string[]

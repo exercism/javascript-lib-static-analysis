@@ -17,7 +17,7 @@ export type ExportNode =
     })
 export type ExportNamedDeclaration = TSESTree.ExportNamedDeclaration
 
-export class Export {
+export class ExtractedExport {
   public readonly name: string | null
 
   constructor(
@@ -45,8 +45,8 @@ export class Export {
  * @param root
  * @see https://astexplorer.net/#/gist/2aa27ed655187c1db5badd04522e7784/4789aa42e4b53af9f7cfb39e448a5d64fbc2e9b5
  */
-export function extractExports(root: Node): Export[] {
-  const exports: Export[] = []
+export function extractExports(root: Node): ExtractedExport[] {
+  const exports: ExtractedExport[] = []
 
   traverse(root, {
     enter(node): void {
@@ -93,7 +93,7 @@ export function extractExports(root: Node): Export[] {
                 const exportedName = specifier.exported.name
 
                 exports.push(
-                  new Export(
+                  new ExtractedExport(
                     node,
                     localName,
                     exportedName,
@@ -111,7 +111,7 @@ export function extractExports(root: Node): Export[] {
             case AST_NODE_TYPES.ClassDeclaration: {
               if (declaration.id) {
                 exports.push(
-                  new Export(
+                  new ExtractedExport(
                     node,
                     declaration.id.name,
                     declaration.id.name,
@@ -127,7 +127,7 @@ export function extractExports(root: Node): Export[] {
             case AST_NODE_TYPES.FunctionDeclaration: {
               if (declaration.id) {
                 exports.push(
-                  new Export(
+                  new ExtractedExport(
                     node,
                     declaration.id.name,
                     declaration.id.name,
@@ -152,7 +152,7 @@ export function extractExports(root: Node): Export[] {
                 // Other patterns such as export const [a, b] are not supported.
                 if (guardIdentifier(declarator.id)) {
                   exports.push(
-                    new Export(
+                    new ExtractedExport(
                       node,
                       declarator.id.name,
                       declarator.id.name,
@@ -175,7 +175,7 @@ export function extractExports(root: Node): Export[] {
             // export declare interface Interface {}
             case AST_NODE_TYPES.TSInterfaceDeclaration: {
               exports.push(
-                new Export(
+                new ExtractedExport(
                   node,
                   declaration.id.name,
                   declaration.id.name,
@@ -190,7 +190,7 @@ export function extractExports(root: Node): Export[] {
             // export declare Type = {}
             case AST_NODE_TYPES.TSTypeAliasDeclaration: {
               exports.push(
-                new Export(
+                new ExtractedExport(
                   node,
                   declaration.id.name,
                   declaration.id.name,
@@ -208,7 +208,9 @@ export function extractExports(root: Node): Export[] {
         // export * as name from 'bar'
         case AST_NODE_TYPES.ExportAllDeclaration: {
           const exported = node.exported ? node.exported.name : '*'
-          exports.push(new Export(node, '*', exported, 'unknown', 'unknown'))
+          exports.push(
+            new ExtractedExport(node, '*', exported, 'unknown', 'unknown')
+          )
           break
         }
 
@@ -227,7 +229,7 @@ export function extractExports(root: Node): Export[] {
             // export default name
             case AST_NODE_TYPES.Identifier: {
               exports.push(
-                new Export(
+                new ExtractedExport(
                   node,
                   declaration.name,
                   'default',
@@ -254,7 +256,7 @@ export function extractExports(root: Node): Export[] {
             // export default class {}
             case AST_NODE_TYPES.ClassDeclaration: {
               exports.push(
-                new Export(
+                new ExtractedExport(
                   node,
                   declaration.id?.name || ANONYMOUS,
                   'default',
@@ -269,7 +271,7 @@ export function extractExports(root: Node): Export[] {
             // export default function {}
             case AST_NODE_TYPES.FunctionDeclaration: {
               exports.push(
-                new Export(
+                new ExtractedExport(
                   node,
                   declaration.id?.name || ANONYMOUS,
                   'default',
@@ -283,7 +285,13 @@ export function extractExports(root: Node): Export[] {
             // export default () => {}
             case AST_NODE_TYPES.ArrowFunctionExpression: {
               exports.push(
-                new Export(node, ANONYMOUS, 'default', 'value', 'function')
+                new ExtractedExport(
+                  node,
+                  ANONYMOUS,
+                  'default',
+                  'value',
+                  'function'
+                )
               )
               break
             }
@@ -291,7 +299,7 @@ export function extractExports(root: Node): Export[] {
             // export default interface Name {}
             case AST_NODE_TYPES.TSInterfaceDeclaration: {
               exports.push(
-                new Export(
+                new ExtractedExport(
                   node,
                   declaration.id.name,
                   'default',
@@ -345,7 +353,7 @@ export function extractExports(root: Node): Export[] {
                   }
 
                   exports.push(
-                    new Export(
+                    new ExtractedExport(
                       { ...node, expression },
                       property.value.name,
                       property.key.name,
@@ -367,7 +375,7 @@ export function extractExports(root: Node): Export[] {
                 guardIdentifier(expression.left.property)
               ) {
                 exports.push(
-                  new Export(
+                  new ExtractedExport(
                     { ...node, expression },
                     guardIdentifier(expression.right)
                       ? expression.right.name
@@ -387,10 +395,6 @@ export function extractExports(root: Node): Export[] {
               ) {
                 const exportedName = expression.left.property.name
 
-                const exportingIdentifier = guardIdentifier(expression.right)
-                const exportingFunction =
-                  expression.right.type === AST_NODE_TYPES.FunctionExpression
-
                 // Exporting a binding, such as a previously declared variable
                 // or function
                 const localName = guardIdentifier(expression.right)
@@ -402,7 +406,7 @@ export function extractExports(root: Node): Export[] {
                   : exportedName
 
                 exports.push(
-                  new Export(
+                  new ExtractedExport(
                     { ...node, expression },
                     localName,
                     exportedName,
