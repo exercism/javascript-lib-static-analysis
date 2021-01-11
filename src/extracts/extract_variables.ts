@@ -7,7 +7,7 @@ type BindingName = TSESTree.BindingName
 type Expression = TSESTree.Expression
 type VariableDeclaration = TSESTree.VariableDeclaration
 
-export class Variable {
+export class ExtractedVariable {
   public readonly name: string | null
 
   constructor(
@@ -24,7 +24,7 @@ export class Variable {
   }
 }
 
-export function extractVariables(root: Node): Variable[] {
+export function extractVariables(root: Node): ExtractedVariable[] {
   const declarations = findAll(
     root,
     (node): node is VariableDeclaration =>
@@ -39,7 +39,9 @@ export function extractVariables(root: Node): Variable[] {
         // const identifier = ...
         // const identifier, identifier = ...
         case AST_NODE_TYPES.Identifier: {
-          return [new Variable(node, declarator.id, kind, declarator.init)]
+          return [
+            new ExtractedVariable(node, declarator.id, kind, declarator.init),
+          ]
         }
 
         // const [identifier, identifier2] = ...
@@ -50,9 +52,9 @@ export function extractVariables(root: Node): Variable[] {
                 return null
               }
 
-              return new Variable(node, element, kind, declarator.init)
+              return new ExtractedVariable(node, element, kind, declarator.init)
             })
-            .filter(Boolean) as Variable[]
+            .filter(Boolean) as ExtractedVariable[]
         }
 
         //

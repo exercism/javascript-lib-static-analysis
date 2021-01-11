@@ -1,6 +1,7 @@
+import { AnalysisError } from './AnalysisError'
 import { SOURCE_PARSE_ERROR } from './codes'
 
-export class ParserError extends Error {
+export class ParserError extends AnalysisError {
   public readonly code: typeof SOURCE_PARSE_ERROR
 
   constructor(
