@@ -651,4 +651,64 @@ describe('extractFunctions', () => {
       })
     })
   })
+
+  describe('multiple functions', () => {
+    test('finds them all', async () => {
+      const [{ program }] = AstParser.ANALYZER.parseSync(`
+function declaration() { return 42 }
+const declaration2 = function* hiddenName() { yield 42 }
+const declaration3 = () => { return 42 }
+
+const collection = {
+  shorthand() { return 42 },
+  property: async () => {},
+  [computed]: function* () { yield 42 },
+}
+
+Klazz.prototype.fn = () => { }`)
+
+      const [fn1, fn2, fn3, fn4, fn5, fn6, fn7, ...others] = extractFunctions(
+        program
+      )
+      expect(others).toHaveLength(0)
+      expect(fn7).not.toBeUndefined()
+
+      expect(fn1.name).toBe('declaration')
+      expect(fn2.name).toBe('declaration2')
+      expect(fn3.name).toBe('declaration3')
+      expect(fn4.name).toBe('shorthand')
+      expect(fn5.name).toBe('property')
+      expect(fn6.name).toBe(undefined)
+      expect(fn7.name).toBe('fn')
+    })
+
+    test('ignores nested functions', async () => {
+      const [{ program }] = AstParser.ANALYZER.parseSync(`
+function declaration() { return () => {} }
+const declaration2 = function* hiddenName() { yield function () {} }
+const declaration3 = () => { return () => 42 }
+
+const collection = {
+  shorthand() { return () => () => {} },
+  property: async () => { function nope() {} },
+  [computed]: function* () { function nope() {} },
+}
+
+Klazz.prototype.fn = () => { return () => {} }`)
+
+      const [fn1, fn2, fn3, fn4, fn5, fn6, fn7, ...others] = extractFunctions(
+        program
+      )
+      expect(others).toHaveLength(0)
+      expect(fn7).not.toBeUndefined()
+
+      expect(fn1.name).toBe('declaration')
+      expect(fn2.name).toBe('declaration2')
+      expect(fn3.name).toBe('declaration3')
+      expect(fn4.name).toBe('shorthand')
+      expect(fn5.name).toBe('property')
+      expect(fn6.name).toBe(undefined)
+      expect(fn7.name).toBe('fn')
+    })
+  })
 })
