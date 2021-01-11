@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.6.0
+
+- Rename extract types to be unambiguously "extracted" values
+- Add `extract_functions`
+- Add `NoSourceAnnotation`
+- Add base error `AnalysisError`
+
 ## 0.5.0
 
 - Add re-exports. This increases file-size and potentially decreases tree-shakability, but oh boi does it increase the DX
