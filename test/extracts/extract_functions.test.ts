@@ -4,7 +4,7 @@ import { extractFunctions } from '~src/extracts/extract_functions'
 import { InlineInput } from '~src/input/InlineInput'
 
 describe('extractFunctions', () => {
-  test.only('smoke test', () => {
+  test('smoke test', () => {
     const [{ program, source }] = AstParser.ANALYZER.parseSync(
       'function twoFer(name="you") { return `One for ${you}, one for me.` }'
     )
