@@ -1,8 +1,27 @@
+import { AST_NODE_TYPES } from '@typescript-eslint/typescript-estree'
 import { AstParser } from '~src/AstParser'
 import { extractFunctions } from '~src/extracts/extract_functions'
 import { InlineInput } from '~src/input/InlineInput'
 
 describe('extractFunctions', () => {
+  test.only('smoke test', () => {
+    const [{ program, source }] = AstParser.ANALYZER.parseSync(
+      'function twoFer(name="you") { return `One for ${you}, one for me.` }'
+    )
+    const [twoFer] = extractFunctions(program)
+
+    expect(twoFer).not.toBeUndefined()
+    expect(twoFer.name).toBe('twoFer')
+    expect(twoFer.body).not.toBeUndefined()
+    expect(twoFer.body.range).toStrictEqual([
+      source.indexOf('{'),
+      source.lastIndexOf('}') + 1,
+    ])
+    expect(twoFer.params).toHaveLength(1)
+    expect(twoFer.params[0].type).toBe(AST_NODE_TYPES.AssignmentPattern)
+    expect(twoFer.node.range).toStrictEqual([0, source.length])
+  })
+
   describe('function declarations', () => {
     const functions = {
       supported: [

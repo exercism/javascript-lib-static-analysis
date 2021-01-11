@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.7.0
+
+- Add `body` to `ExtractedFunction`
+- Move `params` from `ExtractedFunction.metadata` to `ExtractedFunction`
+
 ## 0.6.0
 
 - Rename extract types to be unambiguously "extracted" values

@@ -1,5 +1,4 @@
 import { AST_NODE_TYPES, TSESTree } from '@typescript-eslint/typescript-estree'
-import { FunctionExpression } from 'typescript'
 import { traverse } from '../AstTraverser'
 import { guardIdentifier } from '../guards'
 import { ExtractedVariable } from './extract_variables'
@@ -14,7 +13,6 @@ export type ExtractedFunctionMetadata = {
   isStatic?: boolean
   accessibility?: MethodDefinition['accessibility']
 
-  params: readonly TSESTree.Parameter[]
   variable?: ExtractedVariable
   klazz?: string
 }
@@ -51,6 +49,8 @@ export class ExtractedFunction {
       | 'method' // class { property() {} }
       | 'class-property' // class { property = () => {} }
       | 'prototype-assignment', // Klazz.prototype.property = () => {}
+    public readonly params: readonly TSESTree.Parameter[],
+    public readonly body: Node,
     public readonly metadata: ExtractedFunctionMetadata
   ) {
     //
@@ -212,10 +212,17 @@ export function extractFunctions(root: Node): ExtractedFunction[] {
         expression: isExpression,
         params,
       } = node
-      const metadata = { isAsync, isGenerator, isExpression, params }
+      const metadata = { isAsync, isGenerator, isExpression }
 
       results.push(
-        new ExtractedFunction(node, node.id?.name, 'declaration', metadata)
+        new ExtractedFunction(
+          node,
+          node.id?.name,
+          'declaration',
+          params,
+          node.body,
+          metadata
+        )
       )
     },
 
@@ -274,12 +281,18 @@ export function extractFunctions(root: Node): ExtractedFunction[] {
               isAsync,
               isGenerator,
               isExpression,
-              params,
               variable,
             }
 
             results.push(
-              new ExtractedFunction(declarator, name, 'expression', metadata)
+              new ExtractedFunction(
+                declarator,
+                name,
+                'expression',
+                params,
+                declarator.init.body,
+                metadata
+              )
             )
             return
           }
@@ -301,12 +314,18 @@ export function extractFunctions(root: Node): ExtractedFunction[] {
               isAsync,
               isGenerator,
               isExpression,
-              params,
               variable,
             }
 
             results.push(
-              new ExtractedFunction(declarator, name, 'expression', metadata)
+              new ExtractedFunction(
+                declarator,
+                name,
+                'expression',
+                params,
+                declarator.init.body,
+                metadata
+              )
             )
             return
           }
@@ -369,11 +388,19 @@ export function extractFunctions(root: Node): ExtractedFunction[] {
               isExpression,
               isStatic: node.static,
               accessibility: node.accessibility,
-              params,
               klazz,
             }
 
-            results.push(new ExtractedFunction(node, name, kind, metadata))
+            results.push(
+              new ExtractedFunction(
+                node,
+                name,
+                kind,
+                params,
+                node.value.body,
+                metadata
+              )
+            )
             return
           }
 
@@ -430,12 +457,18 @@ export function extractFunctions(root: Node): ExtractedFunction[] {
                   isExpression,
                   isStatic: node.static,
                   accessibility: node.accessibility,
-                  params,
                   klazz,
                 }
 
                 results.push(
-                  new ExtractedFunction(node, name, 'class-property', metadata)
+                  new ExtractedFunction(
+                    node,
+                    name,
+                    'class-property',
+                    params,
+                    node.value.body,
+                    metadata
+                  )
                 )
                 return
               }
@@ -523,11 +556,17 @@ export function extractFunctions(root: Node): ExtractedFunction[] {
             isAsync,
             isGenerator,
             isExpression,
-            params,
           }
 
           results.push(
-            new ExtractedFunction(property, name, 'property', metadata)
+            new ExtractedFunction(
+              property,
+              name,
+              'property',
+              params,
+              property.value.body,
+              metadata
+            )
           )
           return
         }
@@ -578,7 +617,6 @@ export function extractFunctions(root: Node): ExtractedFunction[] {
             isAsync,
             isGenerator,
             isExpression,
-            params,
             klazz,
           }
 
@@ -587,6 +625,8 @@ export function extractFunctions(root: Node): ExtractedFunction[] {
               assignment,
               name,
               'prototype-assignment',
+              params,
+              assignment.right.body,
               metadata
             )
           )
