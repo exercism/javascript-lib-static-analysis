@@ -16,6 +16,7 @@ export type ExtractedFunctionMetadata = {
 
   params: readonly TSESTree.Parameter[]
   variable?: ExtractedVariable
+  klazz?: string
 }
 
 function extractedKindFromDefinition(
@@ -56,15 +57,17 @@ export class ExtractedFunction {
   }
 }
 
-// https://astexplorer.net/#/gist/aeb176dec81ee8449b98c3e648adb8aa/d230d066db54d09f449a441741123a3dfdc72774
+// https://astexplorer.net/#/gist/aeb176dec81ee8449b98c3e648adb8aa/a4f2a2133cb46de056eed44dac876a594d6a8940
 //
 // function declaration() { return 42 }
 // function* declaration() { yield 42 }
 // async function declaration() { }
+// async function* declaration() { }
 //
 // const named = function () { return 42 }
 // const named = function* () { return 42 }
 // const named = async function() { }
+// const named = async function*() { }
 //
 // let named = ...
 // var name = ...
@@ -72,23 +75,24 @@ export class ExtractedFunction {
 // const arrow = () => { return 42 }
 // const arrow = () => 42
 // const arrow = async () => { }
+// const arrow = async () => 42
 //
 // collection.assignment = () => {}
 // collection.assignment = async () => {}
 //
 // Object.defineProperty(collection, 'property', { value: () => { return 42 } })
 //
-// const name = 'computed'
+// const computed = 'name'
 // const collection = {
 //   shorthand() { return 42 },
 //   *shorthand() { yield 42 },
 //   async shorthand() { },
 //   async *shorthand() { }
 //
-//   [name]() { return 42 }
-//   *[name]() { yield 42 }
-//   async [name]() { }
-//   async *[name]() { }
+//   [computed]() { return 42 }
+//   *[computed]() { yield 42 }
+//   async [computed]() { }
+//   async *[computed]() { }
 //
 //   property: () => { return 42 },
 //   property: async () => {},
@@ -97,12 +101,12 @@ export class ExtractedFunction {
 //   property: async function () {},
 //   property: async function* () {},
 //
-//   [name]: () => { return 42 },
-//   [name]: async () => {},
-//   [name]: function () { return 42 },
-//   [name]: function* () { yield 42 },
-//   [name]: async function () {},
-//   [name]: async function* () {}
+//   [computed]: () => { return 42 },
+//   [computed]: async () => {},
+//   [computed]: function () { return 42 },
+//   [computed]: function* () { yield 42 },
+//   [computed]: async function () {},
+//   [computed]: async function* () {}
 // }
 //
 // class Klazz {
@@ -115,22 +119,23 @@ export class ExtractedFunction {
 //   property = function* () { yield 42 }
 //   property = async function () { }
 //   property = async function* () { }
-//   [name] = () => { return 42 },
-//   [name] = async () => {},
-//   [name] = function () { return 42 },
-//   [name] = function* () { yield 42 },
-//   [name] = async function () {},
-//   [name] = async function* () {}
+//
+//   [computed] = () => { return 42 },
+//   [computed] = async () => {},
+//   [computed] = function () { return 42 },
+//   [computed] = function* () { yield 42 },
+//   [computed] = async function () {},
+//   [computed] = async function* () {}
 //
 //   shorthand() { return 42 }
 //  *shorthand() { return 42 }
 //   async shorthand() { }
 //   async *shorthand() { }
 //
-//   [name]() { return 42 }
-//  *[name]() { yield 42 }
-//   async [name]() { }
-//   async *[name]() { }
+//   [computed]() { return 42 }
+//  *[computed]() { yield 42 }
+//   async [computed]() { }
+//   async *[computed]() { }
 //
 //   static property = () => { return 42 }
 //   static property = async () => {}
@@ -138,22 +143,23 @@ export class ExtractedFunction {
 //   static property = function* () { yield 42 }
 //   static property = async function () { }
 //   static property = async function* () { }
-//   static [name] = () => { return 42 }
-//   static [name] = async () => {}
-//   static [name] = function () { return 42 }
-//   static [name] = function* () { yield 42 }
-//   static [name] = async function () { }
-//   static [name] = async function* () { }
+//
+//   static [computed] = () => { return 42 }
+//   static [computed] = async () => {}
+//   static [computed] = function () { return 42 }
+//   static [computed] = function* () { yield 42 }
+//   static [computed] = async function () { }
+//   static [computed] = async function* () { }
 //
 //   static shorthand() { return 42 }
 //   static *shorthand() { yield 42 }
 //   static async shorthand() {}
 //   static async *shorthand() {}
 //
-//   static [name]() { return 42 }
-//   static *[name]() { yield 42 }
-//   static async [name]() { }
-//   static async *[name]() { }
+//   static [computed]() { return 42 }
+//   static *[computed]() { yield 42 }
+//   static async [computed]() { }
+//   static async *[computed]() { }
 //
 //   #property = () => { }
 //   #shorthand() { }
@@ -172,31 +178,23 @@ export class ExtractedFunction {
 // export default { name: function* () {} }
 // export default { name: async function () {} }
 // export default { name: async function* () {} }
-// export default { name: () => {} }
-// export default { name: async () => {} }
-// export default { name: function () {} }
-// export default { name: function* () {} }
-// export default { name: async function () {} }
-// export default { name: async function* () {} }
-// export default { [name]: () => {} }
-// export default { [name]: async () => {} }
-// export default { [name]: function () {} }
-// export default { [name]: function* () {} }
-// export default { [name]: async function () {} }
-// export default { [name]: async function* () {} }
-// export default { [name]() {} }
-// export default { *[name]() {} }
-// export default { async [name]() {} }
-// export default { async *[name]() {} }export default { [name]: () => {} }
-// export default { [name]: async () => {} }
-// export default { [name]: function () {} }
-// export default { [name]: function* () {} }
-// export default { [name]: async function () {} }
-// export default { [name]: async function* () {} }
-// export default { [name]() {} }
-// export default { *[name]() {} }
-// export default { async [name]() {} }
-// export default { async *[name]() {} }
+//
+// export default { [computed]: () => {} }
+// export default { [computed]: async () => {} }
+// export default { [computed]: function () {} }
+// export default { [computed]: function* () {} }
+// export default { [computed]: async function () {} }
+// export default { [computed]: async function* () {} }
+//
+// export default { name() {} }
+// export default { *name() {} }
+// export default { async name() {} }
+// export default { async *name() {} }
+//
+// export default { [computed]() {} }
+// export default { *[computed]() {} }
+// export default { async [computed]() {} }
+// export default { async *[computed]() {} }
 export function extractFunctions(root: Node): ExtractedFunction[] {
   const results: ExtractedFunction[] = []
 
@@ -204,6 +202,7 @@ export function extractFunctions(root: Node): ExtractedFunction[] {
     // function declaration() { return 42 }
     // function* declaration() { yield 42 }
     // async function declaration() { }
+    // async function* declaration() { }
     [AST_NODE_TYPES.FunctionDeclaration]: function (node) {
       this.skip()
 
@@ -223,6 +222,7 @@ export function extractFunctions(root: Node): ExtractedFunction[] {
     // const named = function () { return 42 }
     // const named = function* () { return 42 }
     // const named = async function() { }
+    // const named = async function*() { }
     //
     // let named = ...
     // var name = ...
@@ -230,6 +230,7 @@ export function extractFunctions(root: Node): ExtractedFunction[] {
     // const arrow = () => { return 42 }
     // const arrow = () => 42
     // const arrow = async () => { }
+    // const arrow = async () => 42
     [AST_NODE_TYPES.VariableDeclaration]: function (node) {
       node.declarations.forEach((declarator) => {
         // Skip uninitialized variables. This means that late-initialized
@@ -259,6 +260,7 @@ export function extractFunctions(root: Node): ExtractedFunction[] {
           // () => { return 42 }
           // () => 42
           // async () => { }
+          // async () => 42
           case AST_NODE_TYPES.ArrowFunctionExpression: {
             this.skip()
 
@@ -285,6 +287,7 @@ export function extractFunctions(root: Node): ExtractedFunction[] {
           // function () { return 42 }
           // function* () { return 42 }
           // async function() { }
+          // async function*() { }
           case AST_NODE_TYPES.FunctionExpression: {
             this.skip()
 
@@ -315,8 +318,11 @@ export function extractFunctions(root: Node): ExtractedFunction[] {
     [AST_NODE_TYPES.ClassDeclaration]: function (node) {
       this.skip()
 
+      const klazz = node.id?.name
+
       node.body.body.forEach((node) => {
         switch (node.type) {
+          // constructor() { }
           // get property() { return 42 }
           // set property(value) { }
           //
@@ -325,20 +331,20 @@ export function extractFunctions(root: Node): ExtractedFunction[] {
           // async shorthand() { }
           // async *shorthand() { }
           //
-          // [name]() { return 42 }
-          // *[name]() { yield 42 }
-          // async [name]() { }
-          // async *[name]() { }
+          // [computed]() { return 42 }
+          // *[computed]() { yield 42 }
+          // async [computed]() { }
+          // async *[computed]() { }
           //
           // static shorthand() { return 42 }
           // static *shorthand() { yield 42 }
           // static async shorthand() {}
           // static async *shorthand() {}
           //
-          // static [name]() { return 42 }
-          // static *[name]() { yield 42 }
-          // static async [name]() { }
-          // static async *[name]() { }
+          // static [computed]() { return 42 }
+          // static *[computed]() { yield 42 }
+          // static async [computed]() { }
+          // static async *[computed]() { }
           //
           // #shorthand() { }
           case AST_NODE_TYPES.MethodDefinition: {
@@ -364,6 +370,7 @@ export function extractFunctions(root: Node): ExtractedFunction[] {
               isStatic: node.static,
               accessibility: node.accessibility,
               params,
+              klazz,
             }
 
             results.push(new ExtractedFunction(node, name, kind, metadata))
@@ -377,12 +384,26 @@ export function extractFunctions(root: Node): ExtractedFunction[] {
           // property = async function () { }
           // property = async function* () { }
           //
+          // [computed] = () => { return 42 }
+          // [computed] = async () => {}
+          // [computed] = function () { return 42 }
+          // [computed] = function* () { yield 42 }
+          // [computed] = async function () { }
+          // [computed] = async function* () { }
+          //
           // static property = () => { return 42 }
           // static property = async () => {}
           // static property = function () { return 42 }
           // static property = function* () { yield 42 }
           // static property = async function () { }
           // static property = async function* () { }
+          //
+          // static [computed] = () => { return 42 }
+          // static [computed] = async () => {}
+          // static [computed] = function () { return 42 }
+          // static [computed] = function* () { yield 42 }
+          // static [computed] = async function () { }
+          // static [computed] = async function* () { }
           //
           // #property = () => { }
           case AST_NODE_TYPES.ClassProperty: {
@@ -410,6 +431,7 @@ export function extractFunctions(root: Node): ExtractedFunction[] {
                   isStatic: node.static,
                   accessibility: node.accessibility,
                   params,
+                  klazz,
                 }
 
                 results.push(
@@ -438,10 +460,10 @@ export function extractFunctions(root: Node): ExtractedFunction[] {
     //   async shorthand() { },
     //   async *shorthand() { }
     //
-    //   [name]() { return 42 }
-    //   *[name]() { yield 42 }
-    //   async [name]() { }
-    //   async *[name]() { }
+    //   [computed]() { return 42 }
+    //   *[computed]() { yield 42 }
+    //   async [computed]() { }
+    //   async *[computed]() { }
     //
     //   property: () => { return 42 },
     //   property: async () => {},
@@ -450,12 +472,12 @@ export function extractFunctions(root: Node): ExtractedFunction[] {
     //   property: async function () {},
     //   property: async function* () {},
     //
-    //   [name]: () => { return 42 },
-    //   [name]: async () => {},
-    //   [name]: function () { return 42 },
-    //   [name]: function* () { yield 42 },
-    //   [name]: async function () {},
-    //   [name]: async function* () {}
+    //   [computed]: () => { return 42 },
+    //   [computed]: async () => {},
+    //   [computed]: function () { return 42 },
+    //   [computed]: function* () { yield 42 },
+    //   [computed]: async function () {},
+    //   [computed]: async function* () {}
     // }
     //
     // export default { name: () => {} }
@@ -464,31 +486,23 @@ export function extractFunctions(root: Node): ExtractedFunction[] {
     // export default { name: function* () {} }
     // export default { name: async function () {} }
     // export default { name: async function* () {} }
-    // export default { name: () => {} }
-    // export default { name: async () => {} }
-    // export default { name: function () {} }
-    // export default { name: function* () {} }
-    // export default { name: async function () {} }
-    // export default { name: async function* () {} }
-    // export default { [name]: () => {} }
-    // export default { [name]: async () => {} }
-    // export default { [name]: function () {} }
-    // export default { [name]: function* () {} }
-    // export default { [name]: async function () {} }
-    // export default { [name]: async function* () {} }
-    // export default { [name]() {} }
-    // export default { *[name]() {} }
-    // export default { async [name]() {} }
-    // export default { async *[name]() {} }export default { [name]: () => {} }
-    // export default { [name]: async () => {} }
-    // export default { [name]: function () {} }
-    // export default { [name]: function* () {} }
-    // export default { [name]: async function () {} }
-    // export default { [name]: async function* () {} }
-    // export default { [name]() {} }
-    // export default { *[name]() {} }
-    // export default { async [name]() {} }
-    // export default { async *[name]() {} }
+    //
+    // export default { [computed]: () => {} }
+    // export default { [computed]: async () => {} }
+    // export default { [computed]: function () {} }
+    // export default { [computed]: function* () {} }
+    // export default { [computed]: async function () {} }
+    // export default { [computed]: async function* () {} }
+    //
+    // export default { name() {} }
+    // export default { *name() {} }
+    // export default { async name() {} }
+    // export default { async *name() {} }
+    //
+    // export default { [computed]() {} }
+    // export default { *[computed]() {} }
+    // export default { async [computed]() {} }
+    // export default { async *[computed]() {} }
     [AST_NODE_TYPES.Property]: function (property) {
       switch (property.value.type) {
         case AST_NODE_TYPES.ArrowFunctionExpression:
@@ -519,7 +533,76 @@ export function extractFunctions(root: Node): ExtractedFunction[] {
         }
       }
     },
+
+    [AST_NODE_TYPES.AssignmentExpression]: function (assignment) {
+      // Search for x.y = ...
+      if (
+        assignment.operator !== '=' ||
+        assignment.left.type !== AST_NODE_TYPES.MemberExpression
+      ) {
+        return
+      }
+
+      // Search for x.prototype.z
+      if (
+        assignment.left.object.type !== AST_NODE_TYPES.MemberExpression ||
+        !guardIdentifier(assignment.left.property) ||
+        !guardIdentifier(assignment.left.object.object) ||
+        !guardIdentifier(assignment.left.object.property) ||
+        assignment.left.object.property.name !== 'prototype'
+      ) {
+        return
+      }
+
+      const klazz = assignment.left.object.object.name
+      const name = assignment.left.property.name
+
+      // Klazz.prototype.fn = () => { }
+      // Klazz.prototype.fn = async () => { }
+      // Klazz.prototype.fn = function () { }
+      // Klazz.prototype.fn = function* () { }
+      // Klazz.prototype.fn = async function () { }
+      // Klazz.prototype.fn = async function* () { }
+      switch (assignment.right.type) {
+        case AST_NODE_TYPES.FunctionExpression:
+        case AST_NODE_TYPES.ArrowFunctionExpression: {
+          this.skip()
+
+          const {
+            async: isAsync,
+            generator: isGenerator,
+            expression: isExpression,
+            params,
+          } = assignment.right
+          const metadata = {
+            isAsync,
+            isGenerator,
+            isExpression,
+            params,
+            klazz,
+          }
+
+          results.push(
+            new ExtractedFunction(
+              assignment,
+              name,
+              'prototype-assignment',
+              metadata
+            )
+          )
+          return
+        }
+      }
+    },
   })
+
+  /** (Still) unsupported as of this commit are:
+   *
+   * collection.assignment = () => {}
+   * collection.assignment = async () => {}
+   *
+   * Object.defineProperty(collection, 'property', { value: () => { return 42 } })
+   */
 
   return results
 }

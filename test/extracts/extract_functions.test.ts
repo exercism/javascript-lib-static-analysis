@@ -30,22 +30,24 @@ describe('extractFunctions', () => {
       unsupported: [],
     }
 
-    functions.supported.forEach(([source, name, metadata]) => {
-      test(`finds a function declaration, such as "${source}"`, async () => {
-        const input = new InlineInput([source])
-        const [{ program }] = await AstParser.ANALYZER.parse(input)
+    describe('finds a function declaration', () => {
+      functions.supported.forEach(([source, name, metadata]) => {
+        test(`such as "${source}"`, async () => {
+          const input = new InlineInput([source])
+          const [{ program }] = await AstParser.ANALYZER.parse(input)
 
-        const [foundFunction, ...others] = extractFunctions(program)
+          const [foundFunction, ...others] = extractFunctions(program)
 
-        expect(others).toHaveLength(0)
-        expect(foundFunction).not.toBeUndefined()
-        expect(foundFunction.name).toBe(name)
-        expect(foundFunction.type).toBe('declaration')
+          expect(others).toHaveLength(0)
+          expect(foundFunction).not.toBeUndefined()
+          expect(foundFunction.name).toBe(name)
+          expect(foundFunction.type).toBe('declaration')
 
-        const keys = Object.keys(metadata) as (keyof typeof metadata)[]
-        keys.forEach((key) => {
-          const expected = metadata[key]
-          expect(foundFunction.metadata[key]).toBe(expected)
+          const keys = Object.keys(metadata) as (keyof typeof metadata)[]
+          keys.forEach((key) => {
+            const expected = metadata[key]
+            expect(foundFunction.metadata[key]).toBe(expected)
+          })
         })
       })
     })
@@ -168,24 +170,26 @@ describe('extractFunctions', () => {
       unsupported: [],
     }
 
-    functions.supported.forEach(([source, name, metadata, kind]) => {
-      test(`finds a ${kind} variable declaration with a(n) (arrow) function expression, such as "${source}"`, async () => {
-        const input = new InlineInput([source])
-        const [{ program }] = await AstParser.ANALYZER.parse(input)
+    describe('finds a variable declaration with a(n) (arrow) function expression', () => {
+      functions.supported.forEach(([source, name, metadata, kind]) => {
+        test(`of kind ${kind}, such as "${source}"`, async () => {
+          const input = new InlineInput([source])
+          const [{ program }] = await AstParser.ANALYZER.parse(input)
 
-        const [foundFunction, ...others] = extractFunctions(program)
+          const [foundFunction, ...others] = extractFunctions(program)
 
-        expect(others).toHaveLength(0)
-        expect(foundFunction).not.toBeUndefined()
-        expect(foundFunction.name).toBe(name)
-        expect(foundFunction.type).toBe('expression')
-        expect(foundFunction.metadata.variable).not.toBeUndefined()
-        expect(foundFunction.metadata.variable?.kind).toBe(kind)
+          expect(others).toHaveLength(0)
+          expect(foundFunction).not.toBeUndefined()
+          expect(foundFunction.name).toBe(name)
+          expect(foundFunction.type).toBe('expression')
+          expect(foundFunction.metadata.variable).not.toBeUndefined()
+          expect(foundFunction.metadata.variable?.kind).toBe(kind)
 
-        const keys = Object.keys(metadata) as (keyof typeof metadata)[]
-        keys.forEach((key) => {
-          const expected = metadata[key]
-          expect(foundFunction.metadata[key]).toBe(expected)
+          const keys = Object.keys(metadata) as (keyof typeof metadata)[]
+          keys.forEach((key) => {
+            const expected = metadata[key]
+            expect(foundFunction.metadata[key]).toBe(expected)
+          })
         })
       })
     })
@@ -198,145 +202,121 @@ describe('extractFunctions', () => {
           `class Klazz { property = () => { return 42 }; }`,
           'property',
           { isAsync: false, isGenerator: false, isStatic: false },
-          'class-property',
         ],
         [
           `class Klazz { property = async () => {}; }`,
           'property',
           { isAsync: true, isGenerator: false, isStatic: false },
-          'class-property',
         ],
         [
           `class Klazz { property = function () { return 42 }; }`,
           'property',
           { isAsync: false, isGenerator: false, isStatic: false },
-          'class-property',
         ],
         [
           `class Klazz { property = function* () { yield 42 }; }`,
           'property',
           { isAsync: false, isGenerator: true, isStatic: false },
-          'class-property',
         ],
         [
           `class Klazz { property = async function () { }; }`,
           'property',
           { isAsync: true, isGenerator: false, isStatic: false },
-          'class-property',
         ],
         [
           `class Klazz { property = async function* () { }; }`,
           'property',
           { isAsync: true, isGenerator: true, isStatic: false },
-          'class-property',
         ],
         [
           `class Klazz { static property = () => { return 42 }; }`,
           'property',
           { isAsync: false, isGenerator: false, isStatic: true },
-          'class-property',
         ],
         [
           `class Klazz { static property = async () => {}; }`,
           'property',
           { isAsync: true, isGenerator: false, isStatic: true },
-          'class-property',
         ],
         [
           `class Klazz { static property = function () { return 42 }; }`,
           'property',
           { isAsync: false, isGenerator: false, isStatic: true },
-          'class-property',
         ],
         [
           `class Klazz { static property = function* () { yield 42 }; }`,
           'property',
           { isAsync: false, isGenerator: true, isStatic: true },
-          'class-property',
         ],
         [
           `class Klazz { static property = async function () { }; }`,
           'property',
           { isAsync: true, isGenerator: false, isStatic: true },
-          'class-property',
         ],
         [
           `class Klazz { static property = async function* () { }; }`,
           'property',
           { isAsync: true, isGenerator: true, isStatic: true },
-          'class-property',
         ],
         [
           `class Klazz { [name] = () => {}; }`,
           undefined,
           { isAsync: false, isGenerator: false, isStatic: false },
-          'class-property',
         ],
         [
           `class Klazz { [name] = async () => {}; }`,
           undefined,
           { isAsync: true, isGenerator: false, isStatic: false },
-          'class-property',
         ],
         [
           `class Klazz { [name] = function () { return 42 }; }`,
           undefined,
           { isAsync: false, isGenerator: false, isStatic: false },
-          'class-property',
         ],
         [
           `class Klazz { [name] = function* () { yield 42 }; }`,
           undefined,
           { isAsync: false, isGenerator: true, isStatic: false },
-          'class-property',
         ],
         [
           `class Klazz { [name] = async function () { }; }`,
           undefined,
           { isAsync: true, isGenerator: false, isStatic: false },
-          'class-property',
         ],
         [
           `class Klazz { [name] = async function* () { }; }`,
           undefined,
           { isAsync: true, isGenerator: true, isStatic: false },
-          'class-property',
         ],
         [
           `class Klazz { static [name] = () => { return 42 }; }`,
           undefined,
           { isAsync: false, isGenerator: false, isStatic: true },
-          'class-property',
         ],
         [
           `class Klazz { static [name] = async () => {}; }`,
           undefined,
           { isAsync: true, isGenerator: false, isStatic: true },
-          'class-property',
         ],
         [
           `class Klazz { static [name] = function () { return 42 }; }`,
           undefined,
           { isAsync: false, isGenerator: false, isStatic: true },
-          'class-property',
         ],
         [
           `class Klazz { static [name] = function* () { yield 42 }; }`,
           undefined,
           { isAsync: false, isGenerator: true, isStatic: true },
-          'class-property',
         ],
         [
           `class Klazz { static [name] = async function () { }; }`,
           undefined,
           { isAsync: true, isGenerator: false, isStatic: true },
-          'class-property',
         ],
         [
           `class Klazz { static [name] = async function* () { }; }`,
           undefined,
           { isAsync: true, isGenerator: true, isStatic: true },
-          'class-property',
         ],
       ] as const,
       methods: [
@@ -455,47 +435,110 @@ describe('extractFunctions', () => {
           'method',
         ],
       ] as const,
+      proto: [
+        [
+          `Klazz.prototype.fn = () => { }`,
+          'fn',
+          { isAsync: false, isGenerator: false },
+        ],
+        [
+          `Klazz.prototype.fn = async () => { }`,
+          'fn',
+          { isAsync: true, isGenerator: false },
+        ],
+        [
+          `Klazz.prototype.fn = function () { }`,
+          'fn',
+          { isAsync: false, isGenerator: false },
+        ],
+        [
+          `Klazz.prototype.fn = function* () { }`,
+          'fn',
+          { isAsync: false, isGenerator: true },
+        ],
+        [
+          `Klazz.prototype.fn = async function () { }`,
+          'fn',
+          { isAsync: true, isGenerator: false },
+        ],
+        [
+          `Klazz.prototype.fn = async function* () { }`,
+          'fn',
+          { isAsync: true, isGenerator: true },
+        ],
+      ] as const,
     }
 
     describe('class properties', () => {
-      functions.properties.forEach(([source, name, metadata, kind]) => {
-        test(`finds a ${kind}, such as "${source}"`, async () => {
-          const input = new InlineInput([source])
-          const [{ program }] = await AstParser.ANALYZER.parse(input)
+      describe(`finds a class-property`, () => {
+        functions.properties.forEach(([source, name, metadata]) => {
+          test(`such as "${source}"`, async () => {
+            const input = new InlineInput([source])
+            const [{ program }] = await AstParser.ANALYZER.parse(input)
 
-          const [foundFunction, ...others] = extractFunctions(program)
+            const [foundFunction, ...others] = extractFunctions(program)
 
-          expect(others).toHaveLength(0)
-          expect(foundFunction).not.toBeUndefined()
-          expect(foundFunction.name).toBe(name)
-          expect(foundFunction.type).toBe(kind)
+            expect(others).toHaveLength(0)
+            expect(foundFunction).not.toBeUndefined()
+            expect(foundFunction.name).toBe(name)
+            expect(foundFunction.type).toBe('class-property')
+            expect(foundFunction.metadata.klazz).toBe('Klazz')
 
-          const keys = Object.keys(metadata) as (keyof typeof metadata)[]
-          keys.forEach((key) => {
-            const expected = metadata[key]
-            expect(foundFunction.metadata[key]).toBe(expected)
+            const keys = Object.keys(metadata) as (keyof typeof metadata)[]
+            keys.forEach((key) => {
+              const expected = metadata[key]
+              expect(foundFunction.metadata[key]).toBe(expected)
+            })
           })
         })
       })
     })
 
     describe('class method definitions', () => {
-      functions.methods.forEach(([source, name, metadata, kind]) => {
-        test(`finds a ${kind}, such as "${source}"`, async () => {
-          const input = new InlineInput([source])
-          const [{ program }] = await AstParser.ANALYZER.parse(input)
+      describe(`finds a method`, () => {
+        functions.methods.forEach(([source, name, metadata, kind]) => {
+          test(`a ${kind}, such as "${source}"`, async () => {
+            const input = new InlineInput([source])
+            const [{ program }] = await AstParser.ANALYZER.parse(input)
 
-          const [foundFunction, ...others] = extractFunctions(program)
+            const [foundFunction, ...others] = extractFunctions(program)
 
-          expect(others).toHaveLength(0)
-          expect(foundFunction).not.toBeUndefined()
-          expect(foundFunction.name).toBe(name)
-          expect(foundFunction.type).toBe(kind)
+            expect(others).toHaveLength(0)
+            expect(foundFunction).not.toBeUndefined()
+            expect(foundFunction.name).toBe(name)
+            expect(foundFunction.type).toBe(kind)
+            expect(foundFunction.metadata.klazz).toBe('Klazz')
 
-          const keys = Object.keys(metadata) as (keyof typeof metadata)[]
-          keys.forEach((key) => {
-            const expected = metadata[key]
-            expect(foundFunction.metadata[key]).toBe(expected)
+            const keys = Object.keys(metadata) as (keyof typeof metadata)[]
+            keys.forEach((key) => {
+              const expected = metadata[key]
+              expect(foundFunction.metadata[key]).toBe(expected)
+            })
+          })
+        })
+      })
+    })
+
+    describe('class prototype assignments', () => {
+      describe('finds a prototype-assignment', () => {
+        functions.proto.forEach(([source, name, metadata]) => {
+          test(`such as "${source}"`, async () => {
+            const input = new InlineInput([source])
+            const [{ program }] = await AstParser.ANALYZER.parse(input)
+
+            const [foundFunction, ...others] = extractFunctions(program)
+
+            expect(others).toHaveLength(0)
+            expect(foundFunction).not.toBeUndefined()
+            expect(foundFunction.name).toBe(name)
+            expect(foundFunction.type).toBe('prototype-assignment')
+            expect(foundFunction.metadata.klazz).toBe('Klazz')
+
+            const keys = Object.keys(metadata) as (keyof typeof metadata)[]
+            keys.forEach((key) => {
+              const expected = metadata[key]
+              expect(foundFunction.metadata[key]).toBe(expected)
+            })
           })
         })
       })
@@ -503,32 +546,109 @@ describe('extractFunctions', () => {
   })
 
   describe('object property', () => {
-    test('finds a function as an object property, such as "const collection = { shorthand() { return 42 } }"', async () => {
-      const input = new InlineInput([
-        `const collection = { shorthand() { return 42 } }`,
-      ])
-      const [{ program }] = await AstParser.ANALYZER.parse(input)
+    const functions = {
+      supported: [
+        [`const collection = { shorthand() { return 42 } }`, 'shorthand'],
+        [`const collection = { *shorthand() { yield 42 } }`, 'shorthand'],
+        [`const collection = { async shorthand() { } }`, 'shorthand'],
+        [`const collection = { async *shorthand() { } }`, 'shorthand'],
 
-      const [foundFunction, ...others] = extractFunctions(program)
+        [`const collection = { [computed]() { return 42 } }`, undefined],
+        [`const collection = { *[computed]() { yield 42 } }`, undefined],
+        [`const collection = { async [computed]() { } }`, undefined],
+        [`const collection = { async *[computed]() { } }`, undefined],
 
-      expect(others).toHaveLength(0)
-      expect(foundFunction).not.toBeUndefined()
-      expect(foundFunction.name).toBe('shorthand')
-      expect(foundFunction.type).toBe('property')
+        [`const collection = { property: () => { return 42 } }`, 'property'],
+        [`const collection = { property: async () => {}  }`, 'property'],
+        [
+          `const collection = { property: function () { return 42 }  }`,
+          'property',
+        ],
+        [
+          `const collection = { property: function* () { yield 42 }  }`,
+          'property',
+        ],
+        [`const collection = { property: async function () {}  }`, 'property'],
+        [`const collection = { property: async function* () {}  }`, 'property'],
+
+        [`const collection = { [computed]: () => { return 42 }  }`, undefined],
+        [`const collection = { [computed]: async () => {}  }`, undefined],
+        [
+          `const collection = { [computed]: function () { return 42 }  }`,
+          undefined,
+        ],
+        [
+          `const collection = { [computed]: function* () { yield 42 }  }`,
+          undefined,
+        ],
+        [`const collection = { [computed]: async function () {}  }`, undefined],
+        [
+          `const collection = { [computed]: async function* () {}  }`,
+          undefined,
+        ],
+      ] as const,
+    }
+
+    describe('finds a function as an object property', () => {
+      functions.supported.forEach(([source, name]) => {
+        test(`such as "${source}"`, async () => {
+          const input = new InlineInput([source])
+          const [{ program }] = await AstParser.ANALYZER.parse(input)
+
+          const [foundFunction, ...others] = extractFunctions(program)
+
+          expect(others).toHaveLength(0)
+          expect(foundFunction).not.toBeUndefined()
+          expect(foundFunction.name).toBe(name)
+          expect(foundFunction.type).toBe('property')
+        })
+      })
     })
   })
 
   describe('export default object', () => {
-    test('finds a function exported as a default object property, such as "export default { name: () => {} }"', async () => {
-      const input = new InlineInput(['export default { name: () => {} }'])
-      const [{ program }] = await AstParser.ANALYZER.parse(input)
+    const functions = {
+      supported: [
+        [`export default { name: () => {} }`, 'name'],
+        [`export default { name: async () => {} }`, 'name'],
+        [`export default { name: function () {} }`, 'name'],
+        [`export default { name: function* () {} }`, 'name'],
+        [`export default { name: async function () {} }`, 'name'],
+        [`export default { name: async function* () {} }`, 'name'],
 
-      const [foundFunction, ...others] = extractFunctions(program)
+        [`export default { [computed]: () => {} }`, undefined],
+        [`export default { [computed]: async () => {} }`, undefined],
+        [`export default { [computed]: function () {} }`, undefined],
+        [`export default { [computed]: function* () {} }`, undefined],
+        [`export default { [computed]: async function () {} }`, undefined],
+        [`export default { [computed]: async function* () {} }`, undefined],
 
-      expect(others).toHaveLength(0)
-      expect(foundFunction).not.toBeUndefined()
-      expect(foundFunction.name).toBe('name')
-      expect(foundFunction.type).toBe('property')
+        [`export default { name() {} }`, 'name'],
+        [`export default { *name() {} }`, 'name'],
+        [`export default { async name() {} }`, 'name'],
+        [`export default { async *name() {} }`, 'name'],
+
+        [`export default { [computed]() {} }`, undefined],
+        [`export default { *[computed]() {} }`, undefined],
+        [`export default { async [computed]() {} }`, undefined],
+        [`export default { async *[computed]() {} }`, undefined],
+      ] as const,
+    }
+
+    describe('finds a function exported as a default object property', () => {
+      functions.supported.forEach(([source, name]) => {
+        test(`such as "${source}"`, async () => {
+          const input = new InlineInput([source])
+          const [{ program }] = await AstParser.ANALYZER.parse(input)
+
+          const [foundFunction, ...others] = extractFunctions(program)
+
+          expect(others).toHaveLength(0)
+          expect(foundFunction).not.toBeUndefined()
+          expect(foundFunction.name).toBe(name)
+          expect(foundFunction.type).toBe('property')
+        })
+      })
     })
   })
 })
