@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.7.1
+
+- Explicitly peer-depend on `@typescript-eslint/visitor-keys`
+
 ## 0.7.0
 
 - Add `body` to `ExtractedFunction`
