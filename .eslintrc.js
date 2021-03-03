@@ -69,5 +69,7 @@ module.exports = {
       },
     ],
     'import/no-unresolved': 'off',
+    'no-extra-semi': 'off',
+    '@typescript-eslint/no-extra-semi': ['off'],
   },
 }
