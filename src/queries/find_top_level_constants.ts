@@ -1,6 +1,9 @@
 import { findAll } from './find_all'
 import { AST_NODE_TYPES, TSESTree } from '@typescript-eslint/typescript-estree'
-import { guardVariableDeclarationOfKind } from '../guards/is_variable_declaration_of_kind'
+import {
+  guardVariableDeclarationOfKind,
+  VariableKind,
+} from '../guards/is_variable_declaration_of_kind'
 import { AstTraverser } from '../AstTraverser'
 
 type Node = TSESTree.Node
@@ -19,7 +22,7 @@ const CONSTANT_MODIFIERS = [
 function isTopLevelConstant(
   this: AstTraverser,
   node: Node,
-  kinds: Parameters<typeof guardVariableDeclarationOfKind>[1]
+  kinds: readonly VariableKind[]
 ): boolean {
   if (guardVariableDeclarationOfKind(node, kinds)) {
     return true
@@ -40,7 +43,7 @@ function isTopLevelConstant(
  */
 export function findTopLevelConstants(
   root: Node,
-  kinds: Parameters<typeof guardVariableDeclarationOfKind>[1]
+  kinds: readonly VariableKind[]
 ): ProgramConstants {
   const constants = findAll(
     root,

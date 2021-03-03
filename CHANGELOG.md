@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.7.3
+
+- Fix signature for `findTopLevelConstants`
+
 ## 0.7.2
 
 - Update dependencies

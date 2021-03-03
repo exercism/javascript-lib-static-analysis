@@ -44,6 +44,11 @@ export function guardVariableDeclarationOfKind(
 export function guardVariableDeclarationOfKind(
   node: Node,
   kinds: readonly VariableKind[]
+): node is VariableDeclarationOfKind<VariableKind>
+
+export function guardVariableDeclarationOfKind(
+  node: Node,
+  kinds: readonly VariableKind[]
 ): node is VariableDeclarationOfKind<VariableKind> {
   if (
     node.type !== AST_NODE_TYPES.VariableDeclaration ||
