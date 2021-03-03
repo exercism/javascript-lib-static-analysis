@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.7.2
+
+- Update dependencies
+
 ## 0.7.1
 
 - Explicitly peer-depend on `@typescript-eslint/visitor-keys`
