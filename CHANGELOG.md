@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.8.0
+
+- Add `DirectoryWithConfigInput` as `Input` method
+
 ## 0.7.3
 
 - Fix signature for `findTopLevelConstants`
