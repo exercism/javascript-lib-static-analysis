@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.8.1
+
+- Add missing exports for `DirectoryWithConfigInput`
+
 ## 0.8.0
 
 - Add `DirectoryWithConfigInput` as `Input` method

@@ -1,4 +1,5 @@
 export * from './DirectoryInput'
+export * from './DirectoryWithConfigInput'
 export * from './FileInput'
 export * from './InlineInput'
 export * from './Input'
