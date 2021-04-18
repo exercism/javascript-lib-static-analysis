@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.9.0
+
+- Add `#files()` for `DirectoryInput` and `DirectoryWithConfigInput`
+
 ## 0.8.1
 
 - Add missing exports for `DirectoryWithConfigInput`
