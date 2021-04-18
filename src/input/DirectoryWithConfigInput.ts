@@ -1,5 +1,5 @@
 import { FileInput } from './FileInput'
-import type { Input } from './Input'
+import { getTrackOptions, Input } from './Input'
 
 import fs from 'fs'
 import path from 'path'
@@ -50,6 +50,7 @@ export class DirectoryWithConfigInput implements Input {
   }
 
   private configuration: MetaConfiguration
+  private trackOptions = getTrackOptions()
 
   constructor(private readonly directory: string) {
     const pathName = path.join(directory, '.meta', 'config.json')
@@ -59,16 +60,27 @@ export class DirectoryWithConfigInput implements Input {
     ) as MetaConfiguration
   }
 
+  public async files(
+    n = this.configuration.files.solution.length
+  ): Promise<FileInput[]> {
+    const candidates = this.configuration.files.solution.slice(0, n)
+
+    return await Promise.all(
+      candidates.map(
+        (candidate) =>
+          new FileInput(path.join(this.directory, candidate), this.trackOptions)
+      )
+    )
+  }
+
   public async read(
     n = this.configuration.files.solution.length
   ): Promise<string[]> {
-    const candidates = this.configuration.files.solution
+    const candidates = await this.files(n)
 
     return await Promise.all(
-      candidates.slice(0, n).map(async (candidate) => {
-        const [source] = await new FileInput(
-          path.join(this.directory, candidate)
-        ).read()
+      candidates.map(async (candidate) => {
+        const [source] = await candidate.read()
         return source
       })
     )

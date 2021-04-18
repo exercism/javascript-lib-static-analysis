@@ -12,7 +12,7 @@ export class DirectoryInput implements Input {
     private trackOptions = getTrackOptions()
   ) {}
 
-  public async read(n = 1, preferredExtension = 'js'): Promise<string[]> {
+  public async files(n = 1, preferredExtension = 'js'): Promise<FileInput[]> {
     const files = await readDir(this.path)
 
     const candidates = findCandidates(
@@ -22,13 +22,19 @@ export class DirectoryInput implements Input {
       this.trackOptions
     )
 
+    return candidates.map(
+      (candidate) =>
+        new FileInput(nodePath.join(this.path, candidate), this.trackOptions)
+    )
+  }
+
+  public async read(n = 1, preferredExtension = 'js'): Promise<string[]> {
+    const files = await this.files(n, preferredExtension)
+
     return await Promise.all(
-      candidates.map(
-        async (candidate): Promise<string> => {
-          const [source] = await new FileInput(
-            nodePath.join(this.path, candidate),
-            this.trackOptions
-          ).read()
+      files.map(
+        async (file): Promise<string> => {
+          const [source] = await file.read()
           return source
         }
       )
