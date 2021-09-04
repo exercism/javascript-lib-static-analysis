@@ -1,4 +1,5 @@
-import { TSESTree, AST_NODE_TYPES } from '@typescript-eslint/typescript-estree'
+import type { TSESTree } from '@typescript-eslint/typescript-estree'
+import { AST_NODE_TYPES } from '@typescript-eslint/typescript-estree'
 
 type Node = TSESTree.Node
 export type VariableKind = TSESTree.VariableDeclaration['kind']

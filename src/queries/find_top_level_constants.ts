@@ -1,10 +1,9 @@
 import { findAll } from './find_all'
-import { AST_NODE_TYPES, TSESTree } from '@typescript-eslint/typescript-estree'
-import {
-  guardVariableDeclarationOfKind,
-  VariableKind,
-} from '../guards/is_variable_declaration_of_kind'
-import { AstTraverser } from '../AstTraverser'
+import type { TSESTree } from '@typescript-eslint/typescript-estree'
+import { AST_NODE_TYPES } from '@typescript-eslint/typescript-estree'
+import type { VariableKind } from '../guards/is_variable_declaration_of_kind'
+import { guardVariableDeclarationOfKind } from '../guards/is_variable_declaration_of_kind'
+import type { AstTraverser } from '../AstTraverser'
 
 type Node = TSESTree.Node
 type VariableDeclaration = TSESTree.VariableDeclaration
@@ -28,7 +27,7 @@ function isTopLevelConstant(
     return true
   }
 
-  if (CONSTANT_MODIFIERS.indexOf(node.type) === -1) {
+  if (!CONSTANT_MODIFIERS.includes(node.type)) {
     this.skip() // doesn't traverse this node any further
   }
 
@@ -55,15 +54,15 @@ export function findTopLevelConstants(
 
       return false
     }
-  ) as VariableDeclaration[]
+  )!
 
-  return constants.reduce(
+  return constants.reduce<ProgramConstants>(
     (declarations, declaration): ProgramConstants =>
       declarations.concat(
         declaration.declarations.map(
           (d): ProgramConstant => ({ ...d, kind: declaration.kind })
         )
       ),
-    [] as ProgramConstants
+    []
   )
 }

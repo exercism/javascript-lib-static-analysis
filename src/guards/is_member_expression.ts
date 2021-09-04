@@ -1,6 +1,9 @@
-import { AST_NODE_TYPES, TSESTree } from '@typescript-eslint/typescript-estree'
-import { Identifier, guardIdentifier } from './is_identifier'
-import { Literal, guardLiteral } from './is_literal'
+import type { TSESTree } from '@typescript-eslint/typescript-estree'
+import { AST_NODE_TYPES } from '@typescript-eslint/typescript-estree'
+import type { Identifier } from './is_identifier'
+import { guardIdentifier } from './is_identifier'
+import type { Literal } from './is_literal'
+import { guardLiteral } from './is_literal'
 
 type Node = TSESTree.Node
 export type MemberExpression = TSESTree.MemberExpression

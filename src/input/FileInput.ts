@@ -1,6 +1,7 @@
 import { readFile } from '../utils/fs'
 import { basename } from 'path'
-import { getTrackOptions, Input, TrackOptions } from './Input'
+import type { Input, TrackOptions } from './Input'
+import { getTrackOptions } from './Input'
 
 export class FileInput implements Input {
   public readonly fileName: string

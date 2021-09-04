@@ -1,4 +1,5 @@
-import { AST_NODE_TYPES, TSESTree } from '@typescript-eslint/typescript-estree'
+import type { TSESTree } from '@typescript-eslint/typescript-estree'
+import { AST_NODE_TYPES } from '@typescript-eslint/typescript-estree'
 import { findAll } from '../queries/find_all'
 import { guardIdentifier } from '../guards/is_identifier'
 
@@ -6,6 +7,7 @@ type Node = TSESTree.Node
 type BindingName = TSESTree.BindingName
 type Expression = TSESTree.Expression
 type VariableDeclaration = TSESTree.VariableDeclaration
+type VariableDeclarator = TSESTree.VariableDeclarator
 
 export class ExtractedVariable {
   public readonly name: string | null
@@ -31,37 +33,51 @@ export function extractVariables(root: Node): ExtractedVariable[] {
       node.type === AST_NODE_TYPES.VariableDeclaration
   )
 
-  return declarations.flatMap((node) => {
-    const { declarations, kind } = node
+  return declarations.flatMap(
+    (node: VariableDeclaration): ExtractedVariable[] => {
+      const { declarations, kind } = node
 
-    return declarations.flatMap((declarator) => {
-      switch (declarator.id.type) {
-        // const identifier = ...
-        // const identifier, identifier = ...
-        case AST_NODE_TYPES.Identifier: {
-          return [
-            new ExtractedVariable(node, declarator.id, kind, declarator.init),
-          ]
+      return declarations.flatMap(
+        (declarator: VariableDeclarator): ExtractedVariable[] => {
+          switch (declarator.id.type) {
+            // const identifier = ...
+            // const identifier, identifier = ...
+            case AST_NODE_TYPES.Identifier: {
+              return [
+                new ExtractedVariable(
+                  node,
+                  declarator.id,
+                  kind,
+                  declarator.init
+                ),
+              ]
+            }
+
+            // const [identifier, identifier2] = ...
+            case AST_NODE_TYPES.ArrayPattern: {
+              return declarator.id.elements
+                .map((element) => {
+                  if (element === null || !guardIdentifier(element)) {
+                    return null
+                  }
+
+                  return new ExtractedVariable(
+                    node,
+                    element,
+                    kind,
+                    declarator.init
+                  )
+                })
+                .filter(Boolean) as ExtractedVariable[]
+            }
+
+            //
+            default: {
+              return []
+            }
+          }
         }
-
-        // const [identifier, identifier2] = ...
-        case AST_NODE_TYPES.ArrayPattern: {
-          return declarator.id.elements
-            .map((element) => {
-              if (element === null || !guardIdentifier(element)) {
-                return null
-              }
-
-              return new ExtractedVariable(node, element, kind, declarator.init)
-            })
-            .filter(Boolean) as ExtractedVariable[]
-        }
-
-        //
-        default: {
-          return []
-        }
-      }
-    })
-  })
+      )
+    }
+  )
 }

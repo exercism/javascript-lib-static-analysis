@@ -1,4 +1,5 @@
-import { AST_NODE_TYPES, TSESTree } from '@typescript-eslint/typescript-estree'
+import type { TSESTree } from '@typescript-eslint/typescript-estree'
+import { AST_NODE_TYPES } from '@typescript-eslint/typescript-estree'
 
 type Node = TSESTree.Node
 export type Identifier = TSESTree.Identifier
@@ -15,10 +16,10 @@ export function guardIdentifier(
   node: Node | null,
   name?: string
 ): node is Omit<Node, 'id'> & Identifier {
-  return (
-    !!node &&
-    node.type === AST_NODE_TYPES.Identifier &&
-    (name === undefined || node.name === name)
+  return Boolean(
+    node &&
+      node.type === AST_NODE_TYPES.Identifier &&
+      (name === undefined || node.name === name)
   )
 }
 

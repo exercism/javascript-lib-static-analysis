@@ -1,5 +1,5 @@
-import { AST_NODE_TYPES, TSESTree } from '@typescript-eslint/typescript-estree'
-import { Expression } from 'typescript'
+import type { TSESTree } from '@typescript-eslint/typescript-estree'
+import { AST_NODE_TYPES } from '@typescript-eslint/typescript-estree'
 import { traverse } from '../AstTraverser'
 import { guardIdentifier } from '../guards/is_identifier'
 import { guardLiteral } from '../guards/is_literal'
@@ -258,7 +258,7 @@ export function extractExports(root: Node): ExtractedExport[] {
               exports.push(
                 new ExtractedExport(
                   node,
-                  declaration.id?.name || ANONYMOUS,
+                  declaration.id?.name ?? ANONYMOUS,
                   'default',
                   'value',
                   'class'
@@ -273,7 +273,7 @@ export function extractExports(root: Node): ExtractedExport[] {
               exports.push(
                 new ExtractedExport(
                   node,
-                  declaration.id?.name || ANONYMOUS,
+                  declaration.id?.name ?? ANONYMOUS,
                   'default',
                   'value',
                   'function'

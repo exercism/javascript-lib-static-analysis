@@ -1,5 +1,6 @@
 import { FileInput } from './FileInput'
-import { getTrackOptions, Input } from './Input'
+import type { Input } from './Input'
+import { getTrackOptions } from './Input'
 
 import fs from 'fs'
 import path from 'path'
@@ -14,11 +15,14 @@ export interface MetaConfiguration {
     exemplar?: string[]
     example?: string[]
   }
+  // eslint-disable-next-line @typescript-eslint/naming-convention
   forked_from?: string[]
 }
 
 export type PersonReference = {
+  // eslint-disable-next-line @typescript-eslint/naming-convention
   github_username: string
+  // eslint-disable-next-line @typescript-eslint/naming-convention
   exercism_username: string
 }
 
@@ -49,8 +53,8 @@ export class DirectoryWithConfigInput implements Input {
     )
   }
 
-  private configuration: MetaConfiguration
-  private trackOptions = getTrackOptions()
+  private readonly configuration: MetaConfiguration
+  private readonly trackOptions = getTrackOptions()
 
   constructor(private readonly directory: string) {
     const pathName = path.join(directory, '.meta', 'config.json')

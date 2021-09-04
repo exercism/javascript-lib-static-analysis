@@ -1,4 +1,4 @@
-import { TSESTree } from '@typescript-eslint/typescript-estree'
+import type { TSESTree } from '@typescript-eslint/typescript-estree'
 import { findFirst } from './find_first'
 
 type Node = TSESTree.Node

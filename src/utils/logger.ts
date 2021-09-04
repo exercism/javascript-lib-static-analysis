@@ -47,8 +47,12 @@ export class Logger {
     return Object.freeze({
       fatal,
 
-      error: console ? global.console.error : error,
-      log: debug ? (console ? global.console.log : log) : noop,
+      error: console ? global.console.error.bind(global.console) : error,
+      log: debug
+        ? console
+          ? global.console.log.bind(global.console)
+          : log
+        : noop,
     })
   }
 }
@@ -69,5 +73,5 @@ export function setProcessLogger(logger: Readonly<Logger>): Readonly<Logger> {
  * Get the 'global' logger
  */
 export function getProcessLogger(): Logger {
-  return LIVE_BINDING.current || NOOP_LOGGER
+  return LIVE_BINDING.current ?? NOOP_LOGGER
 }

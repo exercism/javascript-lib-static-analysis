@@ -2,7 +2,8 @@ import { FileInput } from './FileInput'
 
 import nodePath from 'path'
 import { readDir } from '../utils/fs'
-import { Input, TrackOptions, getTrackOptions } from './Input'
+import type { Input, TrackOptions } from './Input'
+import { getTrackOptions } from './Input'
 
 export class DirectoryInput implements Input {
   constructor(

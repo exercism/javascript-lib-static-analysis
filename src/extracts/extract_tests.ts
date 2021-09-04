@@ -1,10 +1,11 @@
-import { AST_NODE_TYPES, TSESTree } from '@typescript-eslint/typescript-estree'
+import type { TSESTree } from '@typescript-eslint/typescript-estree'
+import { AST_NODE_TYPES } from '@typescript-eslint/typescript-estree'
 import { traverse } from '../AstTraverser'
-import {
+import type {
   CallExpression,
-  guardCallExpression,
   SpecificFunctionCall,
 } from '../guards/is_call_expression'
+import { guardCallExpression } from '../guards/is_call_expression'
 import { guardIdentifier } from '../guards/is_identifier'
 import { guardLiteral } from '../guards/is_literal'
 import { guardMemberExpression } from '../guards/is_member_expression'

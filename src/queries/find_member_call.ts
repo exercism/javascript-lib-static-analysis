@@ -1,5 +1,6 @@
-import { TSESTree } from '@typescript-eslint/typescript-estree'
-import { CallExpression, guardCallExpression } from '../guards'
+import type { TSESTree } from '@typescript-eslint/typescript-estree'
+import type { CallExpression } from '../guards'
+import { guardCallExpression } from '../guards'
 import { guardMemberExpression } from '../guards/is_member_expression'
 import { findFirst } from './find_first'
 
@@ -13,5 +14,5 @@ export function findMemberCall(
   const isMemberCall = (node: Node): node is CallExpression =>
     guardCallExpression(node) &&
     guardMemberExpression(node.callee, object, property)
-  return findFirst(root, isMemberCall) as CallExpression | undefined
+  return findFirst(root, isMemberCall)
 }

@@ -4,7 +4,7 @@ import type { TSESTree } from '@typescript-eslint/typescript-estree'
 
 import { NoSourceError } from './errors/NoSourceError'
 import { ParserError } from './errors/ParserError'
-import { Input } from './input/Input'
+import type { Input } from './input/Input'
 import { getProcessLogger } from './utils/logger'
 
 type Program = TSESTree.Program
@@ -82,6 +82,7 @@ export class AstParser {
    * does not hold locational information (where differences are caused by
    * whitespace differences) or commentary.
    */
+  // eslint-disable-next-line @typescript-eslint/naming-convention
   public static REPRESENTER: AstParser = new AstParser({
     comment: false,
     loc: false,
@@ -93,6 +94,7 @@ export class AstParser {
    * hold locational information (in order to be able to extract tokens), but
    * does not hold any commentary.
    */
+  // eslint-disable-next-line @typescript-eslint/naming-convention
   public static ANALYZER: AstParser = new AstParser({
     comment: false,
     loc: true,
@@ -119,7 +121,9 @@ export class AstParser {
     const logger = getProcessLogger()
 
     logger.log(`=> inputs: ${sources.length}`)
-    sources.forEach((source): void => logger.log(`\n${source}\n`))
+    sources.forEach((source): void => {
+      logger.log(`\n${source}\n`)
+    })
 
     if (sources.length === 0) {
       throw new NoSourceError()
@@ -130,8 +134,12 @@ export class AstParser {
         (source): ParsedSource =>
           new ParsedSource(parseToTree(source, this.options), source)
       )
-    } catch (error) {
-      throw new ParserError(error)
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        throw new ParserError(error)
+      } else {
+        throw error
+      }
     }
   }
 }

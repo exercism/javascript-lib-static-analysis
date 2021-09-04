@@ -31,7 +31,7 @@ export function setTestFiles(pattern: RegExp): void {
 }
 
 /**
- * Sets the DEFAULT configuration files patern globally
+ * Sets the DEFAULT configuration files pattern globally
  * @param pattern
  */
 export function setConfigurationFiles(pattern: RegExp): void {
@@ -44,5 +44,5 @@ export interface Input {
    * @param n the number
    * @returns at most `n` strings
    */
-  read(n?: number): Promise<string[]>
+  read: (n?: number) => Promise<string[]>
 }

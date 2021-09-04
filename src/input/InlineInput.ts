@@ -1,4 +1,4 @@
-import { Input } from './Input'
+import type { Input } from './Input'
 
 export class InlineInput implements Input {
   /**

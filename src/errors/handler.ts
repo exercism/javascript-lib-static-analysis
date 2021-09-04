@@ -20,7 +20,7 @@ export function reportException<
   }
 
   const errorMessage = `
-An uncaughtException occurred (code: ${err.code || GENERIC_FAILURE}).
+An uncaughtException occurred (code: ${err.code ?? GENERIC_FAILURE}).
 
 Error Data:
 ${JSON.stringify(err)}
@@ -34,7 +34,7 @@ ${err.stack ? err.stack : '<no stack>'}
 
   if (typeof process !== 'undefined') {
     // Write error to stderr as well
-    process.stderr && process.stderr.write(errorMessage)
+    process.stderr?.write(errorMessage)
   }
 
   if (process.exit) {

@@ -1,5 +1,5 @@
 import { visitorKeys } from '@typescript-eslint/visitor-keys'
-import { TSESTree } from '@typescript-eslint/typescript-estree'
+import type { TSESTree } from '@typescript-eslint/typescript-estree'
 
 type Node = TSESTree.Node
 
@@ -125,5 +125,5 @@ export class AstTraverser {
 }
 
 export function traverse(root: Node, options: TraverseOptions): void {
-  return new AstTraverser(options).traverse(root)
+  return void new AstTraverser(options).traverse(root)
 }

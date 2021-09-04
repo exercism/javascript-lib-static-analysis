@@ -6,9 +6,9 @@ export class ParserError extends AnalysisError {
 
   constructor(
     public readonly original: Error & {
-      lineNumber: number
-      column: number
-      index: number
+      lineNumber?: number
+      column?: number
+      index?: number
     },
     public readonly source?: string
   ) {

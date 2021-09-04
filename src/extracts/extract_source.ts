@@ -1,4 +1,4 @@
-import { TSESTree } from '@typescript-eslint/typescript-estree'
+import type { TSESTree } from '@typescript-eslint/typescript-estree'
 import { NoSourceAnnotations } from '../errors'
 
 type NodeWithLocation = TSESTree.Node & {
