@@ -3,9 +3,8 @@ import { TSESTree, AST_NODE_TYPES } from '@typescript-eslint/typescript-estree'
 type Node = TSESTree.Node
 export type VariableKind = TSESTree.VariableDeclaration['kind']
 
-export type VariableDeclarationOfKind<
-  T extends VariableKind
-> = TSESTree.VariableDeclaration & { kind: T }
+export type VariableDeclarationOfKind<T extends VariableKind> =
+  TSESTree.VariableDeclaration & { kind: T }
 
 export function guardVariableDeclarationOfKind(
   node: Node,

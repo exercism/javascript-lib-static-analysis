@@ -686,9 +686,8 @@ const collection = {
 
 Klazz.prototype.fn = () => { }`)
 
-      const [fn1, fn2, fn3, fn4, fn5, fn6, fn7, ...others] = extractFunctions(
-        program
-      )
+      const [fn1, fn2, fn3, fn4, fn5, fn6, fn7, ...others] =
+        extractFunctions(program)
       expect(others).toHaveLength(0)
       expect(fn7).not.toBeUndefined()
 
@@ -715,9 +714,8 @@ const collection = {
 
 Klazz.prototype.fn = () => { return () => {} }`)
 
-      const [fn1, fn2, fn3, fn4, fn5, fn6, fn7, ...others] = extractFunctions(
-        program
-      )
+      const [fn1, fn2, fn3, fn4, fn5, fn6, fn7, ...others] =
+        extractFunctions(program)
       expect(others).toHaveLength(0)
       expect(fn7).not.toBeUndefined()
 

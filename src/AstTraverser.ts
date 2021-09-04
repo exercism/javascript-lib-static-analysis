@@ -84,11 +84,13 @@ export class AstTraverser {
       // this was extracted using `[node.type]`, that means that the parameter
       // type is correct. This widens the expected type to be a regular node,
       // but it's actually node & { type: node.type }
-      ;(onSelector as (
-        this: AstTraverser,
-        node: Node,
-        parent: Node | undefined
-      ) => void).call(this, node, parent)
+      ;(
+        onSelector as (
+          this: AstTraverser,
+          node: Node,
+          parent: Node | undefined
+        ) => void
+      ).call(this, node, parent)
     }
 
     if (this.stopped) {

@@ -32,12 +32,10 @@ export class DirectoryInput implements Input {
     const files = await this.files(n, preferredExtension)
 
     return await Promise.all(
-      files.map(
-        async (file): Promise<string> => {
-          const [source] = await file.read()
-          return source
-        }
-      )
+      files.map(async (file): Promise<string> => {
+        const [source] = await file.read()
+        return source
+      })
     )
   }
 
