@@ -7,7 +7,8 @@ export type TrackOptions = {
 export const GLOBAL_TRACK_OPTIONS: TrackOptions = {
   fileExtensions: /\.(jsx?|tsx?|mjs)$/,
   testFilePattern: /\.spec|test\./,
-  configurationFilePattern: /(?:babel\.config\.js|jest\.config\.js|\.eslintrc\.js)$/,
+  configurationFilePattern:
+    /(?:babel\.config\.js|jest\.config\.js|\.eslintrc\.js)$/,
 }
 
 export function getTrackOptions(): TrackOptions {

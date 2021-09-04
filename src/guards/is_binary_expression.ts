@@ -3,9 +3,8 @@ import { AST_NODE_TYPES, TSESTree } from '@typescript-eslint/typescript-estree'
 type Node = TSESTree.Node
 export type BinaryExpression = TSESTree.BinaryExpression
 export type BinaryOperator = BinaryExpression['operator']
-export type BinaryExpressionWithOperator<
-  T extends BinaryOperator
-> = BinaryExpression & { operator: T }
+export type BinaryExpressionWithOperator<T extends BinaryOperator> =
+  BinaryExpression & { operator: T }
 
 export function guardBinaryExpression(node: Node): node is BinaryExpression
 export function guardBinaryExpression<T extends BinaryOperator>(

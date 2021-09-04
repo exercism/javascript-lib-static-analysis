@@ -210,9 +210,8 @@ describe('extractTests', () => {
     ])
 
     const [{ program }] = await AstParser.ANALYZER.parse(input)
-    const [foundTest, foundAlsoTest, foundLastTest, ...others] = extractTests(
-      program
-    )
+    const [foundTest, foundAlsoTest, foundLastTest, ...others] =
+      extractTests(program)
 
     expect(foundTest).not.toBeUndefined()
     expect(foundTest.test).toBe('it finds this test')
