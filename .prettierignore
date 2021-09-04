@@ -1,4 +1,9 @@
-/.github/labels.yml
-/.github/workflows/sync-labels.yml
 /dist
 /test/fixtures
+
+# These are org-wide files (https://github.com/exercism/org-wide-files/)
+/.github/labels.yml
+/.github/workflows/sync-labels.yml
+
+/CODE_OF_CONDUCT.md
+/LICENSE

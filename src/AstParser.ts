@@ -1,6 +1,7 @@
 import { parse as parseToTree } from '@typescript-eslint/typescript-estree'
 import type { DebugLevel } from '@typescript-eslint/types'
 import type { TSESTree } from '@typescript-eslint/typescript-estree'
+import type { TSError } from '@typescript-eslint/typescript-estree/dist/node-utils'
 
 import { NoSourceError } from './errors/NoSourceError'
 import { ParserError } from './errors/ParserError'
@@ -131,7 +132,7 @@ export class AstParser {
           new ParsedSource(parseToTree(source, this.options), source)
       )
     } catch (error) {
-      throw new ParserError(error)
+      throw new ParserError(error as TSError)
     }
   }
 }

@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.10.0
+
+- Bump the dependencies
+- Add `prettier`
+
 ## 0.9.0
 
 - Add `#files()` for `DirectoryInput` and `DirectoryWithConfigInput`
