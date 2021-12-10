@@ -14,7 +14,7 @@ yarn add @exercism/static-analysis
 
 ## Usage
 
-> Note: all types such as `Node` are **not** imported from `'typescript'`, but rather from `'@typescript-eslint/typescript-estree'` in order to increase compatability with tooling and normalisation of the output tree. Types such as `Node` all live on a single export from that package called `TSESTree`.
+> Note: all types such as `Node` are **not** imported from `'typescript'`, but rather from `'@typescript-eslint/typescript-estree'` in order to increase compatibility with tooling and normalisation of the output tree. Types such as `Node` all live on a single export from that package called `TSESTree`.
 
 In order to perform statical analysis on estree compatible languages (such as JavaScript or TypeScript), a source first needs to be parsed. This can be accomplished using the `AstParser`:
 
@@ -28,9 +28,9 @@ const [{ program, source }] = await AstParser.ANALYZER.parse(input)
 
 Any compatible `Input` works, made available to you are:
 
-- [`FileInput`](https://github.com/SleeplessByte/exercism-static-analysis/blob/main/src/input/FileInput.ts) which takes a file path
-- [`DirectoryInput`](https://github.com/SleeplessByte/exercism-static-analysis/blob/main/src/input/DirectoryInput.ts) whichs takes a directory, and uses the `TrackOptions` to filter them out
-- [`InlineInput`](https://github.com/SleeplessByte/exercism-static-analysis/blob/main/src/input/InlineInput.ts) which takes inline string(s) as source(s)
+- [`FileInput`](https://github.com/exercism/javascript-lib-static-analysis/blob/main/src/input/FileInput.ts) which takes a file path
+- [`DirectoryInput`](https://github.com/exercism/javascript-lib-static-analysis/blob/main/src/input/DirectoryInput.ts) which takes a directory, and uses the `TrackOptions` to filter them out
+- [`InlineInput`](https://github.com/exercism/javascript-lib-static-analysis/blob/main/src/input/InlineInput.ts) which takes inline string(s) as source(s)
 
 By default, the `AstParser` will only parse a single file, but it's possible to parse as many files as necessary. In the case of `DirectoryInput`, it will search for the most applicable file, based on the `TrackOptions`.
 
@@ -38,13 +38,13 @@ By default, the `AstParser` will only parse a single file, but it's possible to 
 
 The parsers with recommended configuration for certain jobs are assigned as static properties.
 
-- [`AstParser.ANALYZER`](https://github.com/SleeplessByte/exercism-static-analysis/blob/main/src/AstParser.ts#L96-L100): Holds a parser that is recommended for analysis. This means that it dóés hold locational information (in order to be able to extract tokens), but does not hold any commentary. You **can** `extractSource` code using this parser.
-- [`AstParser.REPRESENTER`](https://github.com/SleeplessByte/exercism-static-analysis/blob/main/src/AstParser.ts#L85-L89): Holds a parser that is recommended for representing. This means that it does not hold locational information (where differences are caused bwhitespace differences) or commentary. You **cannot** `extractSource` code using this parser.
+- [`AstParser.ANALYZER`](https://github.com/exercism/javascript-lib-static-analysis/blob/main/src/AstParser.ts#L96-L101): Holds a parser that is recommended for analysis. This means that it dóés hold locational information (in order to be able to extract tokens), but does not hold any commentary. You **can** `extractSource` code using this parser.
+- [`AstParser.REPRESENTER`](https://github.com/exercism/javascript-lib-static-analysis/blob/main/src/AstParser.ts#L85-L90): Holds a parser that is recommended for representing. This means that it does not hold locational information (where differences are caused by whitespace differences) or commentary. You **cannot** `extractSource` code using this parser.
 - `new AstParser(options, n)`: Setup your own parser, which also allows to parse more than one file by changing the `n` variable.
 
 ### Guards
 
-Guards are named helpers that also work as [type guards](https://www.typescriptlang.org/docs/handbook/advanced-types.html#type-guards-and-differentiating-types). You can find them [here](https://github.com/SleeplessByte/exercism-static-analysis/tree/main/src/guards), and they are imported like this:
+Guards are named helpers that also work as [type guards](https://www.typescriptlang.org/docs/handbook/advanced-types.html#type-guards-and-differentiating-types). You can find them [here](https://github.com/exercism/javascript-lib-static-analysis/tree/main/src/guards), and they are imported like this:
 
 ```typescript
 import { guardIdentifier } from '@exercism/statis-analysis'
@@ -55,7 +55,7 @@ import { guardMemberExpression } from '@exercism/statis-analysis'
 
 ### Queries
 
-Queries utilise the `AstTraverser` to find and/or collect certain node. You can find them [here](https://github.com/SleeplessByte/exercism-static-analysis/tree/main/src/queries), and the are imported like this:
+Queries utilise the `AstTraverser` to find and/or collect certain node(s). You can find them [here](https://github.com/exercism/javascript-lib-static-analysis/tree/main/src/queries), and the are imported like this:
 
 ```typescript
 import { findFirst } from '@exercism/statis-analysis'
