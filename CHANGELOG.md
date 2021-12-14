@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.11.0
+
+- Bump the dependencies
+- Use `@typescript-eslint` for prettier
+
 ## 0.10.0
 
 - Bump the dependencies

@@ -1,6 +1,6 @@
 {
   "name": "@exercism/static-analysis",
-  "version": "0.10.0",
+  "version": "0.11.0",
   "description": "Exercism static analysis library for javascript and typescript",
   "repository": "https://github.com/SleeplessByte/exercism-static-analysis",
   "author": "Derk-Jan Karrenbeld <derk-jan+github@karrenbeld.info>",
@@ -18,29 +18,29 @@
     "test": "jest"
   },
   "peerDependencies": {
-    "@typescript-eslint/typescript-estree": "^4.30.0",
-    "@typescript-eslint/visitor-keys": "^4.30.0"
+    "@typescript-eslint/typescript-estree": "^5.7.0",
+    "@typescript-eslint/visitor-keys": "^5.7.0"
   },
   "devDependencies": {
-    "@babel/cli": "^7.15.4",
-    "@babel/core": "^7.15.5",
-    "@babel/preset-env": "^7.15.4",
-    "@babel/preset-typescript": "^7.15.0",
+    "@babel/cli": "^7.16.0",
+    "@babel/core": "^7.16.5",
+    "@babel/preset-env": "^7.16.5",
+    "@babel/preset-typescript": "^7.16.5",
     "@tsconfig/recommended": "^1.0.1",
-    "@types/jest": "^27.0.1",
-    "@types/node": "^14.17.14",
-    "@typescript-eslint/eslint-plugin": "^4.30.0",
-    "@typescript-eslint/parser": "^4.30.0",
-    "@typescript-eslint/typescript-estree": "^4.30.0",
-    "babel-jest": "^27.1.0",
-    "eslint": "^7.32.0",
+    "@types/jest": "^27.0.3",
+    "@types/node": "^16.11.13",
+    "@typescript-eslint/eslint-plugin": "^5.7.0",
+    "@typescript-eslint/parser": "^5.7.0",
+    "@typescript-eslint/typescript-estree": "^5.7.0",
+    "babel-jest": "^27.4.5",
+    "eslint": "^8.4.1",
     "eslint-config-prettier": "^8.3.0",
-    "eslint-plugin-import": "^2.24.2",
-    "eslint-plugin-jest": "^24.4.0",
-    "jest": "^27.1.0",
-    "prettier": "^2.3.2",
+    "eslint-plugin-import": "^2.25.3",
+    "eslint-plugin-jest": "^25.3.0",
+    "jest": "^27.4.5",
+    "prettier": "^2.5.1",
     "rimraf": "^3.0.2",
-    "typescript": "^4.4.2"
+    "typescript": "^4.5.4"
   },
   "dependencies": {},
   "files": [

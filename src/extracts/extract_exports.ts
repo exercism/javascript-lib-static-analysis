@@ -1,5 +1,4 @@
 import { AST_NODE_TYPES, TSESTree } from '@typescript-eslint/typescript-estree'
-import { Expression } from 'typescript'
 import { traverse } from '../AstTraverser'
 import { guardIdentifier } from '../guards/is_identifier'
 import { guardLiteral } from '../guards/is_literal'
