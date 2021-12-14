@@ -26,11 +26,10 @@ type TraverseOptions = {
     node: Node & { type: key },
     parent: Node | undefined
   ) => void
-} &
-  Partial<{
-    enter: (this: AstTraverser, node: Node, parent: Node | undefined) => void
-    exit: (this: AstTraverser, node: Node, parent: Node | undefined) => void
-  }>
+} & Partial<{
+  enter: (this: AstTraverser, node: Node, parent: Node | undefined) => void
+  exit: (this: AstTraverser, node: Node, parent: Node | undefined) => void
+}>
 
 export class AstTraverser {
   private readonly allVisitorKeys = visitorKeys
