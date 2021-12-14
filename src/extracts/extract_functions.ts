@@ -433,7 +433,7 @@ export function extractFunctions(root: Node): ExtractedFunction[] {
           // static [computed] = async function* () { }
           //
           // #property = () => { }
-          case AST_NODE_TYPES.ClassProperty: {
+          case AST_NODE_TYPES.PropertyDefinition: {
             if (!node.value) {
               return
             }
