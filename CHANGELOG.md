@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.12.0
+
+- Add top-level `describe` index and node tracking for `extractTests`.
+
 ## 0.11.0
 
 - Bump the dependencies

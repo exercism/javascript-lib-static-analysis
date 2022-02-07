@@ -91,7 +91,9 @@ export class ExtractedTestCase {
       | TSESTree.ArrowFunctionExpression,
     public readonly description: string[],
     public readonly test: string,
-    public readonly expectations: ExtractedExpectation[]
+    public readonly expectations: ExtractedExpectation[],
+    public readonly topLevelDescribe: Node | null,
+    public readonly topLevelIndex: number
   ) {
     //
   }
@@ -186,6 +188,8 @@ function extractExpectations(testNode: Node): ExtractedExpectation[] {
 export function extractTests(root: Node): ExtractedTestCase[] {
   const results: ExtractedTestCase[] = []
   const currentDescription: string[] = []
+  const currentDescribe: Node[] = []
+  const allDescribes: Node[] = []
 
   traverse(root, {
     enter(node): void {
@@ -209,6 +213,12 @@ export function extractTests(root: Node): ExtractedTestCase[] {
             guardLiteral(testNameArgument) &&
             typeof testNameArgument.value === 'string'
           ) {
+            // Top-level describe
+            if (currentDescribe.length === 0) {
+              allDescribes.push(node)
+            }
+
+            currentDescribe.push(node)
             currentDescription.push(testNameArgument.value)
           } else {
             // Currently unsupported (such as template literal)
@@ -249,7 +259,9 @@ export function extractTests(root: Node): ExtractedTestCase[] {
                 testArgument,
                 [...currentDescription],
                 testName,
-                extractExpectations(testArgument)
+                extractExpectations(testArgument),
+                currentDescribe[0],
+                allDescribes.length
               )
             )
           } else {
@@ -266,6 +278,7 @@ export function extractTests(root: Node): ExtractedTestCase[] {
       if (node.type === AST_NODE_TYPES.ExpressionStatement) {
         const { expression } = node
         if (isDescribe(expression)) {
+          currentDescribe.pop()
           currentDescription.pop()
         }
       }
