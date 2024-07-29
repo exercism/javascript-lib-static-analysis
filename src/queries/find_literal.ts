@@ -1,6 +1,6 @@
-import { TSESTree } from '@typescript-eslint/typescript-estree'
+import type { TSESTree } from '@typescript-eslint/typescript-estree'
 import { findFirst } from './find_first'
-import { isLiteral } from '../guards/is_literal'
+import { guardLiteral } from '../guards/is_literal'
 
 type Node = TSESTree.Node
 type Literal = TSESTree.Literal
@@ -10,6 +10,6 @@ export function findLiteral(
   root: Node,
   value: LiteralValue
 ): Literal | undefined {
-  const isLiteralValue = (node: Node): node is Literal => isLiteral(node, value)
+  const isLiteralValue = (node: Node) => guardLiteral(node, value)
   return findFirst(root, isLiteralValue)
 }

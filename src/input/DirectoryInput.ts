@@ -1,6 +1,6 @@
 import { FileInput } from './FileInput'
 
-import nodePath from 'path'
+import nodePath from 'node:path'
 import { readDir } from '../utils/fs'
 import { Input, TrackOptions, getTrackOptions } from './Input'
 

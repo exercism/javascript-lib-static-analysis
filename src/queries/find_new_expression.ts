@@ -1,6 +1,9 @@
-import { AST_NODE_TYPES, TSESTree } from '@typescript-eslint/typescript-estree'
+import {
+  AST_NODE_TYPES,
+  type TSESTree,
+} from '@typescript-eslint/typescript-estree'
 import { findFirst } from './find_first'
-import { isIdentifier } from '../guards/is_identifier'
+import { guardIdentifier } from '../guards/is_identifier'
 
 type Node = TSESTree.Node
 type NewExpression = TSESTree.NewExpression
@@ -19,7 +22,7 @@ export function isNewExpression<T extends string>(
 ): node is NewExpression {
   return (
     node.type === AST_NODE_TYPES.NewExpression &&
-    (!className || isIdentifier(node.callee, className))
+    (!className || guardIdentifier(node.callee, className))
   )
 }
 
@@ -28,6 +31,6 @@ export function findNewExpression<T extends string>(
   className: T
 ): NewExpressionWithName<T> | undefined {
   const isNewClass = (node: Node): node is NewExpressionWithName<T> =>
-    isNewExpression(node) && isIdentifier(node.callee, className)
+    isNewExpression(node) && guardIdentifier(node.callee, className)
   return findFirst(root, isNewClass) as NewExpressionWithName<T> | undefined
 }

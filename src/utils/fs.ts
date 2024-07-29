@@ -1,4 +1,4 @@
-import fs from 'fs'
+import fs from 'node:fs'
 
 // Extact utilities
 const { readFile, readdir, writeFile, stat } = fs.promises

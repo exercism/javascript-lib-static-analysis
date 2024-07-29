@@ -2,6 +2,8 @@ import { AstParser } from '~src/AstParser'
 import { extractTests } from '~src/extracts/extract_tests'
 import { InlineInput } from '~src/input/InlineInput'
 
+import { describe, it, expect } from '@jest/globals'
+
 describe('extractTests', () => {
   it('finds a top level test', async () => {
     const input = new InlineInput([

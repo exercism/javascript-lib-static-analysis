@@ -1,6 +1,8 @@
 import { AstParser } from '~src/AstParser'
 import { InlineInput } from '~src/input/InlineInput'
 
+import { describe, it, expect } from '@jest/globals'
+
 const INPUT = new InlineInput([
   `
 /**

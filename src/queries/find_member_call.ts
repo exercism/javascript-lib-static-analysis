@@ -1,4 +1,4 @@
-import { TSESTree } from '@typescript-eslint/typescript-estree'
+import type { TSESTree } from '@typescript-eslint/typescript-estree'
 import { CallExpression, guardCallExpression } from '../guards'
 import { guardMemberExpression } from '../guards/is_member_expression'
 import { findFirst } from './find_first'

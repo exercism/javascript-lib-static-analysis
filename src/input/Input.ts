@@ -8,7 +8,7 @@ export const GLOBAL_TRACK_OPTIONS: TrackOptions = {
   fileExtensions: /\.(jsx?|tsx?|mjs)$/,
   testFilePattern: /\.spec|test\./,
   configurationFilePattern:
-    /(?:babel\.config\.js|jest\.config\.js|\.eslintrc\.js)$/,
+    /(?:babel\.config\.js|jest\.config\.js|\.eslintrc\.js|eslint.config.mjs)$/,
 }
 
 export function getTrackOptions(): TrackOptions {
@@ -32,7 +32,7 @@ export function setTestFiles(pattern: RegExp): void {
 }
 
 /**
- * Sets the DEFAULT configuration files patern globally
+ * Sets the DEFAULT configuration files pattern globally
  * @param pattern
  */
 export function setConfigurationFiles(pattern: RegExp): void {

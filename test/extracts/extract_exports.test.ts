@@ -2,6 +2,8 @@ import { AstParser } from '~src/AstParser'
 import { ANONYMOUS, extractExports } from '~src/extracts/extract_exports'
 import { InlineInput } from '~src/input/InlineInput'
 
+import { describe, it, expect } from '@jest/globals'
+
 describe('extractExports', () => {
   describe('export named declarations', () => {
     const exports = {
@@ -14,7 +16,7 @@ describe('extractExports', () => {
     }
 
     exports.supported.forEach(([source, local, exported]) => {
-      test(`finds a named export, such as "${source}"`, async () => {
+      it(`finds a named export, such as "${source}"`, async () => {
         const input = new InlineInput([source])
         const [{ program }] = await AstParser.ANALYZER.parse(input)
 
@@ -30,7 +32,7 @@ describe('extractExports', () => {
   })
 
   describe('export class declaration', () => {
-    test(`finds an exported class, inline declared`, async () => {
+    it(`finds an exported class, inline declared`, async () => {
       const input = new InlineInput(['export class Name {}'])
       const [{ program }] = await AstParser.ANALYZER.parse(input)
 
@@ -45,7 +47,7 @@ describe('extractExports', () => {
   })
 
   describe('export function declaration', () => {
-    test(`finds an exported function, inline declared`, async () => {
+    it(`finds an exported function, inline declared`, async () => {
       const input = new InlineInput(['export function name() {}'])
       const [{ program }] = await AstParser.ANALYZER.parse(input)
 
@@ -70,7 +72,7 @@ describe('extractExports', () => {
     }
 
     exports.supported.forEach(([source, local]) => {
-      test(`finds an exported variable, inline declared, such as "${source}"`, async () => {
+      it(`finds an exported variable, inline declared, such as "${source}"`, async () => {
         const input = new InlineInput([source])
         const [{ program }] = await AstParser.ANALYZER.parse(input)
 
@@ -97,7 +99,7 @@ describe('extractExports', () => {
     }
 
     exports.supported.forEach(([source, local]) => {
-      test(`finds a typescript export such as "${source}"`, async () => {
+      it(`finds a typescript export such as "${source}"`, async () => {
         const input = new InlineInput([source])
         const [{ program }] = await AstParser.ANALYZER.parse(input)
 
@@ -122,7 +124,7 @@ describe('extractExports', () => {
     }
 
     exports.supported.forEach(([source, exported]) => {
-      test(`finds a namespace/all export such as "${source}"`, async () => {
+      it(`finds a namespace/all export such as "${source}"`, async () => {
         const input = new InlineInput([source])
         const [{ program }] = await AstParser.ANALYZER.parse(input)
 
@@ -155,7 +157,7 @@ describe('extractExports', () => {
     }
 
     exports.supported.forEach(([source, local]) => {
-      test(`finds a default export such as "${source}"`, async () => {
+      it(`finds a default export such as "${source}"`, async () => {
         const input = new InlineInput([source])
         const [{ program }] = await AstParser.ANALYZER.parse(input)
 
@@ -185,7 +187,7 @@ describe('extractExports', () => {
     }
 
     exports.supported.forEach(([source, local, exported]) => {
-      test(`finds a module.exports export such as "${source}"`, async () => {
+      it(`finds a module.exports export such as "${source}"`, async () => {
         const input = new InlineInput([source])
         const [{ program }] = await AstParser.ANALYZER.parse(input)
 

@@ -1,10 +1,12 @@
 import { AST_NODE_TYPES } from '@typescript-eslint/typescript-estree'
 import { AstParser } from '~src/AstParser'
 import { extractFunctions } from '~src/extracts/extract_functions'
+
+import { describe, it, expect } from '@jest/globals'
 import { InlineInput } from '~src/input/InlineInput'
 
 describe('extractFunctions', () => {
-  test('smoke test', () => {
+  it('smoke test', () => {
     const [{ program, source }] = AstParser.ANALYZER.parseSync(
       'function twoFer(name="you") { return `One for ${you}, one for me.` }'
     )
@@ -51,7 +53,7 @@ describe('extractFunctions', () => {
 
     describe('finds a function declaration', () => {
       functions.supported.forEach(([source, name, metadata]) => {
-        test(`such as "${source}"`, async () => {
+        it(`such as "${source}"`, async () => {
           const input = new InlineInput([source])
           const [{ program }] = await AstParser.ANALYZER.parse(input)
 
@@ -191,7 +193,7 @@ describe('extractFunctions', () => {
 
     describe('finds a variable declaration with a(n) (arrow) function expression', () => {
       functions.supported.forEach(([source, name, metadata, kind]) => {
-        test(`of kind ${kind}, such as "${source}"`, async () => {
+        it(`of kind ${kind}, such as "${source}"`, async () => {
           const input = new InlineInput([source])
           const [{ program }] = await AstParser.ANALYZER.parse(input)
 
@@ -491,7 +493,7 @@ describe('extractFunctions', () => {
     describe('class properties', () => {
       describe(`finds a class-property`, () => {
         functions.properties.forEach(([source, name, metadata]) => {
-          test(`such as "${source}"`, async () => {
+          it(`such as "${source}"`, async () => {
             const input = new InlineInput([source])
             const [{ program }] = await AstParser.ANALYZER.parse(input)
 
@@ -516,7 +518,7 @@ describe('extractFunctions', () => {
     describe('class method definitions', () => {
       describe(`finds a method`, () => {
         functions.methods.forEach(([source, name, metadata, kind]) => {
-          test(`a ${kind}, such as "${source}"`, async () => {
+          it(`a ${kind}, such as "${source}"`, async () => {
             const input = new InlineInput([source])
             const [{ program }] = await AstParser.ANALYZER.parse(input)
 
@@ -541,7 +543,7 @@ describe('extractFunctions', () => {
     describe('class prototype assignments', () => {
       describe('finds a prototype-assignment', () => {
         functions.proto.forEach(([source, name, metadata]) => {
-          test(`such as "${source}"`, async () => {
+          it(`such as "${source}"`, async () => {
             const input = new InlineInput([source])
             const [{ program }] = await AstParser.ANALYZER.parse(input)
 
@@ -610,7 +612,7 @@ describe('extractFunctions', () => {
 
     describe('finds a function as an object property', () => {
       functions.supported.forEach(([source, name]) => {
-        test(`such as "${source}"`, async () => {
+        it(`such as "${source}"`, async () => {
           const input = new InlineInput([source])
           const [{ program }] = await AstParser.ANALYZER.parse(input)
 
@@ -656,7 +658,7 @@ describe('extractFunctions', () => {
 
     describe('finds a function exported as a default object property', () => {
       functions.supported.forEach(([source, name]) => {
-        test(`such as "${source}"`, async () => {
+        it(`such as "${source}"`, async () => {
           const input = new InlineInput([source])
           const [{ program }] = await AstParser.ANALYZER.parse(input)
 
@@ -672,7 +674,7 @@ describe('extractFunctions', () => {
   })
 
   describe('multiple functions', () => {
-    test('finds them all', async () => {
+    it('finds them all', async () => {
       const [{ program }] = AstParser.ANALYZER.parseSync(`
 function declaration() { return 42 }
 const declaration2 = function* hiddenName() { yield 42 }
@@ -700,7 +702,7 @@ Klazz.prototype.fn = () => { }`)
       expect(fn7.name).toBe('fn')
     })
 
-    test('ignores nested functions', async () => {
+    it('ignores nested functions', async () => {
       const [{ program }] = AstParser.ANALYZER.parseSync(`
 function declaration() { return () => {} }
 const declaration2 = function* hiddenName() { yield function () {} }

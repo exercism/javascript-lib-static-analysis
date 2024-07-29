@@ -1,5 +1,7 @@
 import { FileInput } from '~src/input/FileInput'
-import fs from 'fs'
+import fs from 'node:fs'
+
+import { jest, beforeEach, describe, it, expect } from '@jest/globals'
 
 jest.mock('fs')
 

@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.13.0
+
+- Bump the dependencies
+- Simplify toolchain
+- Use `@exercism/eslint-config-tooling`
+- Use Yarn 4
+- Use Yarn PnP
+- Use ESLint 9
+
 ## 0.12.0
 
 - Add top-level `describe` index and node tracking for `extractTests`.

@@ -1,4 +1,4 @@
-import { TSESTree } from '@typescript-eslint/typescript-estree'
+import type { TSESTree } from '@typescript-eslint/typescript-estree'
 import { AnalysisError } from './AnalysisError'
 import { WRONG_ANALYZER_FOR_METHOD } from './codes'
 

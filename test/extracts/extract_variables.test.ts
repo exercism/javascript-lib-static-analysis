@@ -2,6 +2,8 @@ import { AstParser } from '~src/AstParser'
 import { extractVariables } from '~src/extracts/extract_variables'
 import { InlineInput } from '~src/input/InlineInput'
 
+import { describe, it, expect } from '@jest/globals'
+
 describe('extractVariables', () => {
   it('finds a top level variable', async () => {
     const input = new InlineInput(['const topLevel = 42;'])
@@ -18,7 +20,7 @@ describe('extractVariables', () => {
   const KINDS = ['let', 'const', 'var']
 
   KINDS.forEach((kind) => {
-    test(`it finds a ${kind} declared variable`, async () => {
+    it(`it finds a ${kind} declared variable`, async () => {
       const input = new InlineInput([`${kind} topLevel = 42;`])
       const [{ program }] = await AstParser.ANALYZER.parse(input)
 

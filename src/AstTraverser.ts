@@ -56,7 +56,7 @@ export class AstTraverser {
   public traverse(
     node: unknown,
     parent?: TSESTree.Node | undefined,
-    skipChildren = false
+    _skipChildren = false
   ): void {
     if (!isValidNode(node)) {
       return
