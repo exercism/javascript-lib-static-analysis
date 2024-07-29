@@ -5,10 +5,10 @@ export function registerExceptionHandler(): void {
 }
 
 export function reportException<
-  T extends Error & { message: string; code?: number }
+  T extends Error & { message: string; code?: number },
 >(err: T): never
 export function reportException<
-  T extends Error & { message: string; code?: number }
+  T extends Error & { message: string; code?: number },
 >(err: T | string): never {
   if (typeof err === 'string') {
     return reportException({
@@ -29,7 +29,6 @@ Stacktrace:
 ${err.stack ? err.stack : '<no stack>'}
   `.trim()
 
-  // eslint-disable-next-line no-console
   console.error(errorMessage)
 
   if (typeof process !== 'undefined') {

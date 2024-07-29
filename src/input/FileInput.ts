@@ -1,5 +1,5 @@
 import { readFile } from '../utils/fs'
-import { basename } from 'path'
+import { basename } from 'node:path'
 import { getTrackOptions, Input, TrackOptions } from './Input'
 
 export class FileInput implements Input {

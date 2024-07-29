@@ -3,6 +3,8 @@ import { extractVariables } from '~src/extracts/extract_variables'
 import { isLiteral } from '~src/guards/is_literal'
 import { InlineInput } from '~src/input/InlineInput'
 
+import { describe, expect, it } from '@jest/globals'
+
 const literalsP = AstParser.ANALYZER.parse(
   new InlineInput([
     `const aLiteralString = 'literal'

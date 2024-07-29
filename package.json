@@ -1,6 +1,6 @@
 {
   "name": "@exercism/static-analysis",
-  "version": "0.12.0",
+  "version": "0.13.0",
   "description": "Exercism static analysis library for javascript and typescript",
   "repository": "https://github.com/SleeplessByte/exercism-static-analysis",
   "author": "Derk-Jan Karrenbeld <derk-jan+github@karrenbeld.info>",
@@ -14,36 +14,36 @@
     "build:types": "tsc --project src --declaration --emitDeclarationOnly --outDir dist",
     "prepare": "yarn build",
     "prepublishOnly": "yarn test && yarn lint",
-    "lint": "yarn eslint . --ext ts,js,tsx,jsx,mjs",
+    "lint": "yarn eslint .",
     "test": "jest"
   },
   "peerDependencies": {
-    "@typescript-eslint/typescript-estree": "^5.7.0",
-    "@typescript-eslint/visitor-keys": "^5.7.0"
+    "@typescript-eslint/typescript-estree": "^7.18.0",
+    "@typescript-eslint/visitor-keys": "^7.18.0"
   },
   "devDependencies": {
-    "@babel/cli": "^7.16.0",
-    "@babel/core": "^7.16.5",
-    "@babel/preset-env": "^7.16.5",
-    "@babel/preset-typescript": "^7.16.5",
-    "@tsconfig/recommended": "^1.0.1",
-    "@types/jest": "^27.0.3",
-    "@types/node": "^16.11.13",
-    "@typescript-eslint/eslint-plugin": "^5.7.0",
-    "@typescript-eslint/parser": "^5.7.0",
-    "@typescript-eslint/typescript-estree": "^5.7.0",
-    "babel-jest": "^27.4.5",
-    "eslint": "^8.4.1",
-    "eslint-config-prettier": "^8.3.0",
-    "eslint-plugin-import": "^2.25.3",
-    "eslint-plugin-jest": "^25.3.0",
-    "jest": "^27.4.5",
-    "prettier": "^2.5.1",
-    "rimraf": "^3.0.2",
-    "typescript": "^4.5.4"
+    "@babel/cli": "^7.24.8",
+    "@babel/core": "^7.24.9",
+    "@babel/preset-env": "^7.25.0",
+    "@babel/preset-typescript": "^7.24.7",
+    "@exercism/eslint-config-tooling": "^0.5.0",
+    "@jest/globals": "^29.7.0",
+    "@tsconfig/recommended": "^1.0.7",
+    "@types/node": "^22.0.0",
+    "@typescript-eslint/eslint-plugin": "^7.18.0",
+    "@typescript-eslint/parser": "^7.18.0",
+    "@typescript-eslint/types": "^7.18.0",
+    "@typescript-eslint/typescript-estree": "^7.18.0",
+    "@typescript-eslint/visitor-keys": "^7.18.0",
+    "babel-jest": "^29.7.0",
+    "eslint": "^9.8.0",
+    "jest": "^29.7.0",
+    "prettier": "^3.3.3",
+    "rimraf": "^6.0.1",
+    "typescript": "^5.5.4"
   },
-  "dependencies": {},
   "files": [
     "dist"
-  ]
+  ],
+  "packageManager": "yarn@4.3.1"
 }

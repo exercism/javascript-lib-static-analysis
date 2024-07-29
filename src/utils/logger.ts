@@ -31,6 +31,7 @@ function noop(_: LoggerInput): void {
   /* noop */
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unsafe-declaration-merging
 export interface Logger {
   error: typeof error
   fatal: typeof fatal
@@ -42,6 +43,7 @@ export type LoggerOptions = {
   console: boolean
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unsafe-declaration-merging
 export class Logger {
   constructor({ debug, console }: LoggerOptions) {
     return Object.freeze({

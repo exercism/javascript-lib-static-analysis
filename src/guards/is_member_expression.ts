@@ -1,4 +1,7 @@
-import { AST_NODE_TYPES, TSESTree } from '@typescript-eslint/typescript-estree'
+import {
+  AST_NODE_TYPES,
+  type TSESTree,
+} from '@typescript-eslint/typescript-estree'
 import { Identifier, guardIdentifier } from './is_identifier'
 import { Literal, guardLiteral } from './is_literal'
 
@@ -16,7 +19,7 @@ export type SpecificObjectProperty<O, P> = SpecificObject<O> &
 
 export function guardMemberExpression<
   O extends string,
-  P extends string | number
+  P extends string | number,
 >(node: Node, object: O, property: P): node is SpecificObjectProperty<O, P>
 export function guardMemberExpression<O extends string>(
   node: Node,
@@ -31,7 +34,7 @@ export function guardMemberExpression(node: Node): node is MemberExpression
 
 export function guardMemberExpression<
   O extends string,
-  P extends string | number
+  P extends string | number,
 >(node: Node, object?: O, property?: P): node is MemberExpression {
   return (
     node.type === AST_NODE_TYPES.MemberExpression &&

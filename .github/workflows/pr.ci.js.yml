@@ -7,38 +7,38 @@ on: pull_request
 
 jobs:
   precheck:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
 
     steps:
       - name: Checkout PR
-        uses: actions/checkout@v2
+        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332
 
-      - name: Use Node.js LTS (16.x)
-        uses: actions/setup-node@v1
+      - name: Use Node.js LTS (20.x)
+        uses: actions/setup-node@1e60f620b9541d16bece96c5465dc8ee9832be0b
         with:
-          node-version: 16.x
+          node-version: 20.x
 
       - name: Install project dependencies
-        run: yarn install --frozen-lockfile --ignore-scripts
+        run: yarn install --immutable
 
       - name: Lint code
         run: yarn lint
 
   ci:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
 
     strategy:
       matrix:
-        node-version: [14.x, 16.x]
+        node-version: [20.x, 22.x]
 
     steps:
       - name: Checkout PR
-        uses: actions/checkout@v2
+        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332
 
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@1e60f620b9541d16bece96c5465dc8ee9832be0b
         with:
           node-version: ${{ matrix.node-version }}
 
       - name: Install project dependencies and run tests
-        run: yarn install --frozen-lockfile
+        run: yarn install --immutable

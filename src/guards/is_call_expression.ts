@@ -1,4 +1,7 @@
-import { AST_NODE_TYPES, TSESTree } from '@typescript-eslint/typescript-estree'
+import {
+  AST_NODE_TYPES,
+  type TSESTree,
+} from '@typescript-eslint/typescript-estree'
 import {
   guardMemberExpression,
   SpecificObject,
@@ -21,7 +24,7 @@ export type SpecificPropertyCall<P> = CallExpression & {
 export type SpecificObjectPropertyCall<O, P> = SpecificObjectCall<O> &
   SpecificPropertyCall<P>
 
-export function guardCallExpression<O extends string, C extends string>(
+export function guardCallExpression<_O extends string, C extends string>(
   node: Node,
   callee: C
 ): node is SpecificFunctionCall<C>
@@ -39,14 +42,14 @@ export function guardCallExpression<P extends string>(
   object: undefined,
   property: P
 ): node is SpecificPropertyCall<P>
-export function guardCallExpression<P extends string>(
+export function guardCallExpression<_P extends string>(
   node: Node
 ): node is CallExpression
 
 export function guardCallExpression<
   O extends string | undefined,
   P extends string | undefined,
-  C extends string | undefined
+  C extends string | undefined,
 >(node: Node, object?: O | C, property?: P): node is CallExpression {
   if (node.type !== AST_NODE_TYPES.CallExpression) {
     return false

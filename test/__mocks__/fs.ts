@@ -1,14 +1,23 @@
-import path from 'path'
+import path from 'node:path'
 import {
-  BaseEncodingOptions,
+  type EncodingOption as BaseEncodingOptions,
   Dirent,
   Mode,
   OpenMode,
   PathLike,
   Stats,
 } from 'fs'
-import type { promises } from 'fs'
+import { jest } from '@jest/globals'
+import type { BigIntStats, promises } from 'node:fs'
+import type { Stream } from 'node:stream'
+
 type FileHandle = promises.FileHandle
+type Data =
+  | string
+  | NodeJS.ArrayBufferView
+  | Iterable<string | NodeJS.ArrayBufferView>
+  | AsyncIterable<string | NodeJS.ArrayBufferView>
+  | Stream
 
 const fs = jest.createMockFromModule('fs') as Omit<
   typeof import('fs'),
@@ -203,7 +212,7 @@ async function readFile(
  */
 function writeFile(
   path: PathLike | FileHandle,
-  data: string | Uint8Array,
+  data: Data,
   options?:
     | (BaseEncodingOptions & { mode?: Mode; flag?: OpenMode })
     | BufferEncoding
@@ -212,7 +221,7 @@ function writeFile(
 
 async function writeFile(
   filePath: PathLike | FileHandle,
-  data: string | Uint8Array
+  data: Data
 ): Promise<void> {
   const key = path.normalize(filePath.toString())
   const dir = path.dirname(key)
@@ -234,8 +243,9 @@ async function writeFile(
  * @param path A path to a file. If a URL is provided, it must use the `file:` protocol.
  */
 function stat(path: PathLike): Promise<Stats>
+function stat(path: PathLike): Promise<BigIntStats>
 
-async function stat(filePath: PathLike): Promise<Stats> {
+async function stat(filePath: PathLike): Promise<Stats | BigIntStats> {
   const key = path.normalize(filePath.toString())
   const dir = path.dirname(key)
   const file = path.basename(key)

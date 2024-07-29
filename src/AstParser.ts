@@ -120,7 +120,9 @@ export class AstParser {
     const logger = getProcessLogger()
 
     logger.log(`=> inputs: ${sources.length}`)
-    sources.forEach((source): void => logger.log(`\n${source}\n`))
+    sources.forEach((source): void => {
+      logger.log(`\n${source}\n`)
+    })
 
     if (sources.length === 0) {
       throw new NoSourceError()

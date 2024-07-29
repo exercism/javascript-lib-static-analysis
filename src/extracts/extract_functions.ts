@@ -1,4 +1,7 @@
-import { AST_NODE_TYPES, TSESTree } from '@typescript-eslint/typescript-estree'
+import {
+  AST_NODE_TYPES,
+  type TSESTree,
+} from '@typescript-eslint/typescript-estree'
 import { traverse } from '../AstTraverser'
 import { guardIdentifier } from '../guards'
 import { ExtractedVariable } from './extract_variables'

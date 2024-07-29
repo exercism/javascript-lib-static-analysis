@@ -1,4 +1,7 @@
-import { AST_NODE_TYPES, TSESTree } from '@typescript-eslint/typescript-estree'
+import {
+  AST_NODE_TYPES,
+  type TSESTree,
+} from '@typescript-eslint/typescript-estree'
 import { traverse } from '../AstTraverser'
 import { guardIdentifier } from '../guards/is_identifier'
 import { guardLiteral } from '../guards/is_literal'
@@ -399,10 +402,11 @@ export function extractExports(root: Node): ExtractedExport[] {
                 const localName = guardIdentifier(expression.right)
                   ? expression.right.name
                   : // Exporting an inline declared function
-                  expression.right.type === AST_NODE_TYPES.FunctionExpression &&
-                    guardIdentifier(expression.right.id)
-                  ? expression.right.id.name
-                  : exportedName
+                    expression.right.type ===
+                        AST_NODE_TYPES.FunctionExpression &&
+                      guardIdentifier(expression.right.id)
+                    ? expression.right.id.name
+                    : exportedName
 
                 exports.push(
                   new ExtractedExport(
@@ -413,9 +417,9 @@ export function extractExports(root: Node): ExtractedExport[] {
                     guardIdentifier(expression.right)
                       ? 'identifier'
                       : expression.right.type ===
-                        AST_NODE_TYPES.FunctionExpression
-                      ? 'function'
-                      : 'unknown'
+                          AST_NODE_TYPES.FunctionExpression
+                        ? 'function'
+                        : 'unknown'
                   )
                 )
               }

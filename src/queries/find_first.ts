@@ -1,4 +1,4 @@
-import { TSESTree } from '@typescript-eslint/typescript-estree'
+import type { TSESTree } from '@typescript-eslint/typescript-estree'
 import { AstTraverser, traverse } from '../AstTraverser'
 
 type Node = TSESTree.Node

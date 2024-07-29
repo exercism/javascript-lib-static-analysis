@@ -1,10 +1,13 @@
-import { AST_NODE_TYPES, TSESTree } from '@typescript-eslint/typescript-estree'
+import {
+  AST_NODE_TYPES,
+  type TSESTree,
+} from '@typescript-eslint/typescript-estree'
 
 type Node = TSESTree.Node
 export type Identifier = TSESTree.Identifier
 export type IdentifierWithName<T extends string> = Identifier & { name: T }
 
-export function guardIdentifier<T extends string>(
+export function guardIdentifier<_T extends string>(
   node: Node | null
 ): node is Omit<Node, 'id'> & Identifier
 export function guardIdentifier<T extends string>(
@@ -16,6 +19,7 @@ export function guardIdentifier(
   name?: string
 ): node is Omit<Node, 'id'> & Identifier {
   return (
+    // eslint-disable-next-line no-implicit-coercion
     !!node &&
     node.type === AST_NODE_TYPES.Identifier &&
     (name === undefined || node.name === name)
