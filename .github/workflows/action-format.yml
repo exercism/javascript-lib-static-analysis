@@ -1,4 +1,4 @@
-name: 'javascript-lib-static-analysis / format'
+name: 'static-analysis / format'
 
 on:
   issue_comment:
