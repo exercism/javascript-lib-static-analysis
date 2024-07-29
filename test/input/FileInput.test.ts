@@ -1,5 +1,5 @@
 import { FileInput } from '~src/input/FileInput'
-import fs from 'node:fs'
+import fs from 'fs'
 
 import { jest, beforeEach, describe, it, expect } from '@jest/globals'
 

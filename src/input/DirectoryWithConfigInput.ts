@@ -1,7 +1,7 @@
 import { FileInput } from './FileInput'
 import { getTrackOptions, Input } from './Input'
 
-import fs from 'node:fs'
+import fs from 'fs'
 import path from 'node:path'
 
 export interface MetaConfiguration {

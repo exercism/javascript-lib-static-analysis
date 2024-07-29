@@ -6,7 +6,7 @@ import {
   OpenMode,
   PathLike,
   Stats,
-} from 'node:fs'
+} from 'fs'
 import { jest } from '@jest/globals'
 import type { BigIntStats, promises } from 'node:fs'
 import type { Stream } from 'node:stream'
