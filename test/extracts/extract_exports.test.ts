@@ -87,7 +87,7 @@ describe('extractExports', () => {
     })
   })
 
-  describe('export typesript declarations', () => {
+  describe('export typescript declarations', () => {
     const exports = {
       supported: [
         [`export interface Name {}`, 'Name'],
