@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.14.0
+
+- Bump the dependencies
+- Simplify toolchain
+- Use `@exercism/babel-preset-typescript`
+
 ## 0.13.0
 
 - Bump the dependencies
